@@ -1,4 +1,4 @@
-package ru.mephi.gpus_agrgtr.configuration;
+package ru.mephi.gpus_agrgtr.config;
 
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;

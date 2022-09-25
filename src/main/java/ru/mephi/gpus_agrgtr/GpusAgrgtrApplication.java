@@ -1,16 +1,20 @@
 package ru.mephi.gpus_agrgtr;
 
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.RequiredArgsConstructor;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
-import ru.mephi.gpus_agrgtr.parser.technopark.TechnoparkParser;
+import ru.mephi.gpus_agrgtr.parser.Parser;
+import ru.mephi.gpus_agrgtr.rest.services.ProductService;
+
+import java.util.List;
 
 @SpringBootApplication
+@RequiredArgsConstructor
 public class GpusAgrgtrApplication implements CommandLineRunner {
 
-    @Autowired
-    TechnoparkParser technoparkParser;
+    private final List<Parser> parsers;
+    private final ProductService productService;
 
     public static void main(String[] args) {
         SpringApplication.run(GpusAgrgtrApplication.class, args);
@@ -18,6 +22,8 @@ public class GpusAgrgtrApplication implements CommandLineRunner {
 
     @Override
     public void run(String... args) {
-        technoparkParser.getAllVideoCards();
+        for (Parser parser : parsers) {
+            productService.save(parser.parse());
+        }
     }
 }

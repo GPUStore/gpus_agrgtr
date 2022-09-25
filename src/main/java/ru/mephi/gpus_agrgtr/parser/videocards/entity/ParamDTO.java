@@ -1,4 +1,4 @@
-package ru.mephi.gpus_agrgtr.parser.technopark.entity;
+package ru.mephi.gpus_agrgtr.parser.videocards.entity;
 
 import lombok.Data;
 
@@ -6,5 +6,4 @@ import lombok.Data;
 public class ParamDTO {
     private String name;
     private String value;
-    private String __typename;
 }

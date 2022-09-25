@@ -1,0 +1,286 @@
+{
+    "data": {
+        "productV2": {
+            "id": "309211",
+            "specifications": {
+                "barcode": "0889523028629",
+                "country": "",
+                "full": [
+                    {
+                        "name": "Основные характеристики",
+                        "list": [
+                            {
+                                "name": "Тип видеокарты",
+                                "value": "десктопная",
+                                "__typename": "ProductSpecificationsItem"
+                            },
+                            {
+                                "name": "Разработчик видеокарты",
+                                "value": "NVIDIA",
+                                "__typename": "ProductSpecificationsItem"
+                            },
+                            {
+                                "name": "Видеопроцессор",
+                                "value": "GeForce RTX 3060",
+                                "__typename": "ProductSpecificationsItem"
+                            },
+                            {
+                                "name": "Тип подключения",
+                                "value": "PCI-E",
+                                "__typename": "ProductSpecificationsItem"
+                            },
+                            {
+                                "name": "Версия PCI Express",
+                                "value": "4.0",
+                                "__typename": "ProductSpecificationsItem"
+                            },
+                            {
+                                "name": "Техпроцесс",
+                                "value": "8 нм",
+                                "__typename": "ProductSpecificationsItem"
+                            },
+                            {
+                                "name": "Количество поддерживаемых мониторов",
+                                "value": "4",
+                                "__typename": "ProductSpecificationsItem"
+                            },
+                            {
+                                "name": "Максимальное разрешение",
+                                "value": "7680x4320",
+                                "__typename": "ProductSpecificationsItem"
+                            },
+                            {
+                                "name": "Игровая видеокарта",
+                                "value": "да",
+                                "__typename": "ProductSpecificationsItem"
+                            }
+                        ],
+                        "__typename": "ProductSpecificationsGroup"
+                    },
+                    {
+                        "name": "Технические характеристики",
+                        "list": [
+                            {
+                                "name": "Частота графического процессора",
+                                "value": "1320 МГц",
+                                "__typename": "ProductSpecificationsItem"
+                            },
+                            {
+                                "name": "Частота видеопроцессора Boost",
+                                "value": "1837 МГц",
+                                "__typename": "ProductSpecificationsItem"
+                            },
+                            {
+                                "name": "Объем видеопамяти",
+                                "value": "12 Гб",
+                                "__typename": "ProductSpecificationsItem"
+                            },
+                            {
+                                "name": "Тип видеопамяти",
+                                "value": "GDDR6",
+                                "__typename": "ProductSpecificationsItem"
+                            },
+                            {
+                                "name": "Частота видеопамяти",
+                                "value": "15000 МГц",
+                                "__typename": "ProductSpecificationsItem"
+                            },
+                            {
+                                "name": "Разрядность шины видеопамяти",
+                                "value": "192 бит",
+                                "__typename": "ProductSpecificationsItem"
+                            },
+                            {
+                                "name": "Пропускная способность видеопамяти",
+                                "value": "2880 Гбит/с",
+                                "__typename": "ProductSpecificationsItem"
+                            }
+                        ],
+                        "__typename": "ProductSpecificationsGroup"
+                    },
+                    {
+                        "name": "Видео разъемы",
+                        "list": [
+                            {
+                                "name": "Порт HDMI",
+                                "value": "2",
+                                "__typename": "ProductSpecificationsItem"
+                            },
+                            {
+                                "name": "Порт DisplayPort",
+                                "value": "2",
+                                "__typename": "ProductSpecificationsItem"
+                            }
+                        ],
+                        "__typename": "ProductSpecificationsGroup"
+                    },
+                    {
+                        "name": "Математический блок",
+                        "list": [
+                            {
+                                "name": "Число универсальных процессоров",
+                                "value": "3584",
+                                "__typename": "ProductSpecificationsItem"
+                            },
+                            {
+                                "name": "Версия шейдеров",
+                                "value": "6.4",
+                                "__typename": "ProductSpecificationsItem"
+                            },
+                            {
+                                "name": "Число текстурных блоков",
+                                "value": "112",
+                                "__typename": "ProductSpecificationsItem"
+                            },
+                            {
+                                "name": "Число блоков растеризации",
+                                "value": "64",
+                                "__typename": "ProductSpecificationsItem"
+                            }
+                        ],
+                        "__typename": "ProductSpecificationsGroup"
+                    },
+                    {
+                        "name": "Поддержка стандартов",
+                        "list": [
+                            {
+                                "name": "Версия DirectX",
+                                "value": "12",
+                                "__typename": "ProductSpecificationsItem"
+                            },
+                            {
+                                "name": "Версия OpenGL",
+                                "value": "4.6",
+                                "__typename": "ProductSpecificationsItem"
+                            }
+                        ],
+                        "__typename": "ProductSpecificationsGroup"
+                    },
+                    {
+                        "name": "Дополнительные характеристики",
+                        "list": [
+                            {
+                                "name": "Поддержка CUDA",
+                                "value": "да",
+                                "__typename": "ProductSpecificationsItem"
+                            },
+                            {
+                                "name": "Число процессоров CUDA",
+                                "value": "3584",
+                                "__typename": "ProductSpecificationsItem"
+                            },
+                            {
+                                "name": "Необходимость дополнительного питания",
+                                "value": "да",
+                                "__typename": "ProductSpecificationsItem"
+                            },
+                            {
+                                "name": "Разъем дополнительного питания",
+                                "value": "8 pin",
+                                "__typename": "ProductSpecificationsItem"
+                            },
+                            {
+                                "name": "Рекомендуемая мощность блока питания",
+                                "value": "550 Вт",
+                                "__typename": "ProductSpecificationsItem"
+                            },
+                            {
+                                "name": "Тип системы охлаждения",
+                                "value": "активная",
+                                "__typename": "ProductSpecificationsItem"
+                            },
+                            {
+                                "name": "Дизайн системы охлаждения",
+                                "value": "кастомный",
+                                "__typename": "ProductSpecificationsItem"
+                            },
+                            {
+                                "name": "Количество вентиляторов",
+                                "value": "3",
+                                "__typename": "ProductSpecificationsItem"
+                            },
+                            {
+                                "name": "Размер вентилятора",
+                                "value": "80 мм",
+                                "__typename": "ProductSpecificationsItem"
+                            },
+                            {
+                                "name": "Количество занимаемых слотов",
+                                "value": "2",
+                                "__typename": "ProductSpecificationsItem"
+                            },
+                            {
+                                "name": "Название системы охлаждения",
+                                "value": "GIGABYTE WindForce 3X",
+                                "__typename": "ProductSpecificationsItem"
+                            },
+                            {
+                                "name": "Подсветка элементов видеокарты",
+                                "value": "да",
+                                "__typename": "ProductSpecificationsItem"
+                            },
+                            {
+                                "name": "Цвет подсветки",
+                                "value": "RGB",
+                                "__typename": "ProductSpecificationsItem"
+                            },
+                            {
+                                "name": "Разогнанная версия",
+                                "value": "да",
+                                "__typename": "ProductSpecificationsItem"
+                            },
+                            {
+                                "name": "Защитная металическая пластина",
+                                "value": "да",
+                                "__typename": "ProductSpecificationsItem"
+                            }
+                        ],
+                        "__typename": "ProductSpecificationsGroup"
+                    },
+                    {
+                        "name": "Комплектация",
+                        "list": [
+                            {
+                                "name": "Инструкция",
+                                "value": "да",
+                                "__typename": "ProductSpecificationsItem"
+                            }
+                        ],
+                        "__typename": "ProductSpecificationsGroup"
+                    },
+                    {
+                        "name": "Размеры и вес",
+                        "list": [
+                            {
+                                "name": "Высота",
+                                "value": "4.1 см",
+                                "__typename": "ProductSpecificationsItem"
+                            },
+                            {
+                                "name": "Ширина",
+                                "value": "28.2 см",
+                                "__typename": "ProductSpecificationsItem"
+                            },
+                            {
+                                "name": "Глубина",
+                                "value": "11.7 см",
+                                "__typename": "ProductSpecificationsItem"
+                            }
+                        ],
+                        "__typename": "ProductSpecificationsGroup"
+                    }
+                ],
+                "grossWeight": "0",
+                "netWeight": "0",
+                "height": "0",
+                "instructionUrl": "https://cdn.technopark.ru/photos/309211/instruction/1790025482.pdf",
+                "length": "0",
+                "schemeUrl": null,
+                "warranty": "0",
+                "width": "0",
+                "__typename": "ProductV2Specifications"
+            },
+            "__typename": "ProductV2"
+        }
+    }
+}

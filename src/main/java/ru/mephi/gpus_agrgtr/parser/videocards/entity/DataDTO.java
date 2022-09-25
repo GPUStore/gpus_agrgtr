@@ -1,4 +1,4 @@
-package ru.mephi.gpus_agrgtr.parser.technopark.entity;
+package ru.mephi.gpus_agrgtr.parser.videocards.entity;
 
 import lombok.Data;
 

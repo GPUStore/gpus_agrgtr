@@ -1,5 +1,6 @@
 server:
   port: 8080
+
 spring:
   datasource:
     url: jdbc:postgresql://localhost:5432/gpus_db
@@ -9,12 +10,22 @@ spring:
   jpa:
     show-sql: true
     open-in-view: false
+#    database:
+#    hibernate:
+#      ddl-auto: create
   properties:
     hibernate:
       format_sql: true
+
+logging:
+  pattern:
+    console: "%d{yyyy-MM-dd HH:mm:ss} - %msg%n"
 
 url:
   technopark:
     list: https://www.technopark.ru/videokarty/?p=%d
     base: https://www.technopark.ru/
-    one-videocard: https://www.technopark.ru/graphql/
+    product: https://www.technopark.ru/graphql/
+  mvideo:
+  citilink:
+  dns:
