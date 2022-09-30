@@ -56,6 +56,8 @@ public class TechnoparkParser extends Parser {
 
     @Override
     public List<Product> getAllProducts() {
+
+
         List<Product> products = new ArrayList<>();
         try {
             Document page = getPage(1);
@@ -130,35 +132,30 @@ public class TechnoparkParser extends Parser {
                 .setCountry(specificationsDTO.getCountry())
                 .setWeight(specificationsDTO.getNetWeight())
                 .setWeightWithBox(specificationsDTO.getGrossWeight())
-                .setCharacteristics(toCharacteristics(specificationsDTO.getFull()))
+                .setParameters(parseFull(specificationsDTO.getFull()))
                 .setName(buildName(specificationsDTO.getFull()));*/
         return new Product();
     }
-
-    private List<Characteristic> toCharacteristics(List<FullDTO> fullsDTO) {
-/*        return fullsDTO.stream()
-                .map(fullDTO -> {
-*//*                    Characteristic characteristic = new Characteristic();
-                            return characteristic.setParameters(toParams(fullDTO.getList(), characteristic))
-                            .setName(fullDTO.getName());*//*
-                    return new Characteristic()
-                            .setName(fullDTO.getName());
-                    //.setParameters(toParams(fullDTO.getList()));
+/*
+    private List<Parameter> parseFull(List<FullDTO> fullsDTO) {
+        return fullsDTO.stream()
+                .flatMap(fullDTO -> {
+                    Characteristic characteristic = new Characteristic().setName(fullDTO.getName());
+                    return toParams(fullDTO.getList(), characteristic).stream();
                 })
-                .toList();*/
-        return new ArrayList<>();
+                .toList();
+
     }
 
-    private List<Parameter> toParams(List<ParamDTO> list/*, Characteristic characteristic*/) {
-/*        return list.stream()
+    private List<Parameter> toParams(List<ParamDTO> list, Characteristic characteristic) {
+        return list.stream()
                 .map(paramDTO -> new Parameter()
                                 .setName(paramDTO.getName())
                                 .setValue(paramDTO.getValue())
                         //.setCharacteristic(characteristic)
                 )
-                .toList();*/
-        return new ArrayList<>();
-    }
+                .toList();
+    }*/
 
     private String buildName(List<FullDTO> fullsDTO) {
         List<ParamDTO> mainParams = getValueByFullName(fullsDTO, "Основные характеристики");

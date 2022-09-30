@@ -1,1 +1,0 @@
-INSERT INTO parameter (title) VALUES ('Тип видеокарты', '');
