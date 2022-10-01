@@ -1,14 +1,14 @@
 package ru.mephi.gpus_agrgtr.entity;
 
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 import lombok.Setter;
 import org.hibernate.annotations.GenericGenerator;
 
 import javax.persistence.*;
-import java.util.List;
-import java.util.Objects;
 
 @Data
+@EqualsAndHashCode
 @Setter
 @Entity
 @Table(name = "parameter")
@@ -19,7 +19,7 @@ public class Parameter {
     @Column(name = "parameter_id", length = 32)
     private String id;
 
-/*    @Column(name = "name")
+    @Column(name = "name")
     private String name;
     @Column(name = "value", length = 512)
     private String value;
@@ -28,9 +28,9 @@ public class Parameter {
     @JoinColumn(name = "product_id")
     private Product product;
 
-*//*    @ManyToOne(*//**//*cascade = CascadeType.ALL*//**//*)
+    @ManyToOne
     @JoinColumn(name = "characteristic_id", nullable = false)
-    private Characteristic characteristic;*//*
+    private Characteristic characteristic;
 
     public Parameter setId(String id) {
         this.id = id;
@@ -47,16 +47,13 @@ public class Parameter {
         return this;
     }
 
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-        Parameter parameter = (Parameter) o;
-        return name.equals(parameter.name) && value.equals(parameter.value);
+    public Parameter setProduct(Product product) {
+        this.product = product;
+        return this;
     }
 
-    @Override
-    public int hashCode() {
-        return Objects.hash(name, value);
-    }*/
+    public Parameter setCharacteristic(Characteristic characteristic) {
+        this.characteristic = characteristic;
+        return this;
+    }
 }

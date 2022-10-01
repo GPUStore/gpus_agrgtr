@@ -24,6 +24,7 @@ import static ru.mephi.gpus_agrgtr.utils.StringUtils.getByPattern;
 public class TechnoparkParser extends Parser {
     private final String baseUrl;
     private final String requestUrl;
+    private static final String PATH_FOR_SERIAL_NUMBER = "div.product-card-big__name";
     private static final String PATH_FOR_ARTICLES = "div.product-card-big__code";
     private static final String PATH_FOR_COSTS = "div.product-prices__price";
     private static final String PATH_FOR_LINKS = "a.product-card-link.product-card-big__title";
@@ -41,6 +42,7 @@ public class TechnoparkParser extends Parser {
             "           __typename } grossWeight netWeight height instructionUrl length schemeUrl warranty" +
             "           width __typename } __typename }}\"" +
             "}";
+    private static final String SERIAL_NUMBER = "\\(.+\\)";
     private static final String NUMBER = "\\d+";
     private static final String MOSCOW = "36966";
     private static final String TOKEN = "985bb5a6c945fdbd3ba16002d07b0c29";
@@ -55,9 +57,20 @@ public class TechnoparkParser extends Parser {
     }
 
     @Override
+    public Characteristic toCharacteristic(String name) {
+        return switch (name) {
+            case "Основные характеристики" -> new Characteristic().setName("Основные характеристики");
+            case "Видое разъемы", "Математический блок", "Поддержка стандартов", "Технические характеристики" ->
+                    new Characteristic().setName("Технические характеристики");
+            case "Разъемы" -> new Characteristic().setName("Разъемы");
+            case "Комплектация" -> new Characteristic().setName("Комплектация");
+            case "Размер и вес" -> new Characteristic().setName("Размер и вес");
+            default -> new Characteristic().setName("Дополнительные характеристики");
+        };
+    }
+
+    @Override
     public List<Product> getAllProducts() {
-
-
         List<Product> products = new ArrayList<>();
         try {
             Document page = getPage(1);
@@ -65,12 +78,14 @@ public class TechnoparkParser extends Parser {
             for (int numberOfPage = 1; numberOfPage <= countPages; numberOfPage++) {
                 List<Double> costs = getCosts(page);
                 List<String> links = getLinks(page);
+                List<String> serialNumbers = getSerialNumbers(page);
                 List<String> articles = getArticles(page);
                 for (int j = 0; j < articles.size(); j++) {
                     try {
                         Product product = requestProduct(articles.get(j))
                                 .setCost(costs.get(j))
                                 .setUrl(links.get(j));
+                        product.setName((product.getName() + " " + serialNumbers.get(j)).trim().toUpperCase());
                         products.add(product);
                     } catch (RuntimeException e) {
                         //log. Продукт с артиклем={} не создан
@@ -101,6 +116,13 @@ public class TechnoparkParser extends Parser {
                 .toList();
     }
 
+    private List<String> getSerialNumbers(Document page) {
+        return page.select(PATH_FOR_SERIAL_NUMBER)
+                .stream().map(Element::ownText)
+                .map(textWithId -> getByPattern(SERIAL_NUMBER, textWithId))
+                .toList();
+    }
+
     private List<String> getLinks(Document page) {
         return page.select(PATH_FOR_LINKS).stream()
                 .map(element -> element.attr("href"))
@@ -126,21 +148,20 @@ public class TechnoparkParser extends Parser {
     }
 
     private Product createProduct(Response response) {
-/*        SpecificationsDTO specificationsDTO = response.getData().getProductV2().getSpecifications();
+        SpecificationsDTO specificationsDTO = response.getData().getProductV2().getSpecifications();
         return new Product()
                 .setType(Type.VIDEOCARD)
                 .setCountry(specificationsDTO.getCountry())
                 .setWeight(specificationsDTO.getNetWeight())
                 .setWeightWithBox(specificationsDTO.getGrossWeight())
                 .setParameters(parseFull(specificationsDTO.getFull()))
-                .setName(buildName(specificationsDTO.getFull()));*/
-        return new Product();
+                .setName(buildName(specificationsDTO.getFull()));
     }
-/*
+
     private List<Parameter> parseFull(List<FullDTO> fullsDTO) {
         return fullsDTO.stream()
                 .flatMap(fullDTO -> {
-                    Characteristic characteristic = new Characteristic().setName(fullDTO.getName());
+                    Characteristic characteristic = toCharacteristic(fullDTO.getName());
                     return toParams(fullDTO.getList(), characteristic).stream();
                 })
                 .toList();
@@ -150,12 +171,12 @@ public class TechnoparkParser extends Parser {
     private List<Parameter> toParams(List<ParamDTO> list, Characteristic characteristic) {
         return list.stream()
                 .map(paramDTO -> new Parameter()
-                                .setName(paramDTO.getName())
-                                .setValue(paramDTO.getValue())
-                        //.setCharacteristic(characteristic)
+                        .setName(paramDTO.getName())
+                        .setValue(paramDTO.getValue())
+                        .setCharacteristic(characteristic)
                 )
                 .toList();
-    }*/
+    }
 
     private String buildName(List<FullDTO> fullsDTO) {
         List<ParamDTO> mainParams = getValueByFullName(fullsDTO, "Основные характеристики");

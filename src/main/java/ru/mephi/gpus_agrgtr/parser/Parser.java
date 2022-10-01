@@ -7,6 +7,7 @@ import org.jsoup.Connection;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.springframework.stereotype.Component;
+import ru.mephi.gpus_agrgtr.entity.Characteristic;
 import ru.mephi.gpus_agrgtr.entity.Product;
 
 import java.io.IOException;
@@ -23,6 +24,8 @@ public abstract class Parser {
         this.url = url;
         this.mapper = mapper;
     }
+
+    public abstract Characteristic toCharacteristic(String name);
 
     public List<Product> parse() {
         try {

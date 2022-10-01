@@ -24,7 +24,6 @@ public class GpusAgrgtrApplication implements CommandLineRunner {
     public void run(String... args) {
         for (Parser parser : parsers) {
             productService.save(parser.parse());
-            //productService.getAll();
         }
     }
 }

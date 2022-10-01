@@ -16,16 +16,16 @@ public class Characteristic {
     @Column(name = "characteristic_id")
     private String name;
 
-/*    @OneToMany(mappedBy = "characteristic", fetch = FetchType.LAZY*//**//*, cascade = CascadeType.ALL*//**//*)
-    private List<Parameter> parameters;*//*
+    @OneToMany(mappedBy = "characteristic", fetch = FetchType.LAZY)
+    private List<Parameter> parameters;
 
     public Characteristic setName(String name) {
         this.name = name;
         return this;
-    }*/
+    }
 
-/*    public Characteristic setParameters(List<Parameter> parameters) {
+    public Characteristic setParameters(List<Parameter> parameters) {
         this.parameters = parameters;
         return this;
-    }*/
+    }
 }

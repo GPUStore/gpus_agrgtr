@@ -29,8 +29,9 @@ public class Product {
     private double weight;
     @Column(name = "weight_with_box")
     private double weightWithBox;
-    //@OneToMany(mappedBy = "product", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
-    //private List<Parameter> parameters;
+
+    @OneToMany(mappedBy = "product", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    private List<Parameter> parameters;
     @Enumerated(EnumType.STRING)
     private Type type;
 
@@ -66,6 +67,11 @@ public class Product {
 
     public Product setWeightWithBox(double weightWithBox) {
         this.weightWithBox = weightWithBox;
+        return this;
+    }
+
+    public Product setParameters(List<Parameter> parameters) {
+        this.parameters = parameters;
         return this;
     }
 

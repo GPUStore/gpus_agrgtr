@@ -21,23 +21,15 @@ import java.util.List;
 public class ProductService {
 
     private final ProductRepository productRepository;
-    private final CharacteristicRepository characteristicRepository;
-    private final ParameterRepository parameterRepository;
 
-    //@Transactional
     public void save(List<Product> products) {
         for (Product product : products) {
-/*            for (Parameter parameter : product.getParameters()) {
-*//*                if (characteristicRepository.findCharacteristicByName(parameter.getCharacteristic().getName()).isEmpty()) {
-                    characteristicRepository.save(parameter.getCharacteristic());
-                }*//*
-                //if (parameterRepository.findParameterByNameAndValue(parameter.getName(), parameter.getValue()).isEmpty())
-                    parameterRepository.save(parameter);
-
-            }*/
+            for (Parameter parameter : product.getParameters()) {
+                parameter.setProduct(product);
+            }
             productRepository.save(product);
         }
-
+        System.out.println();
     }
 }
 
