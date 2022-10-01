@@ -5,10 +5,7 @@ import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
-import ru.mephi.gpus_agrgtr.entity.Characteristic;
-import ru.mephi.gpus_agrgtr.entity.Parameter;
-import ru.mephi.gpus_agrgtr.entity.Product;
-import ru.mephi.gpus_agrgtr.entity.Type;
+import ru.mephi.gpus_agrgtr.entity.*;
 import ru.mephi.gpus_agrgtr.parser.Parser;
 import ru.mephi.gpus_agrgtr.parser.videocards.entity.FullDTO;
 import ru.mephi.gpus_agrgtr.parser.videocards.entity.ParamDTO;
@@ -83,8 +80,10 @@ public class TechnoparkParser extends Parser {
                 for (int j = 0; j < articles.size(); j++) {
                     try {
                         Product product = requestProduct(articles.get(j))
-                                .setCost(costs.get(j))
-                                .setUrl(links.get(j));
+                                .setStore(List.of(new Store()
+                                        .setName("Technopark")
+                                        .setUrl(links.get(j))
+                                        .setCost(costs.get(j))));
                         product.setName((product.getName() + " " + serialNumbers.get(j)).trim().toUpperCase());
                         products.add(product);
                     } catch (RuntimeException e) {

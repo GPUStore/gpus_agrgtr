@@ -19,10 +19,8 @@ public class Product {
     private String id;
     @Column(name = "name")
     private String name;
-    @Column(name = "url")
-    private String url;
-    @Column(name = "cost")
-    private Double cost;
+    @OneToMany(mappedBy = "product", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    private List<Store> store;
     @Column(name = "country")
     private String country;
     @Column(name = "weight")
@@ -35,6 +33,11 @@ public class Product {
     @Enumerated(EnumType.STRING)
     private Type type;
 
+    public Product setStore(List<Store> store) {
+        this.store = store;
+        return this;
+    }
+
     public Product setId(String id) {
         this.id = id;
         return this;
@@ -42,16 +45,6 @@ public class Product {
 
     public Product setName(String name) {
         this.name = name;
-        return this;
-    }
-
-    public Product setUrl(String url) {
-        this.url = url;
-        return this;
-    }
-
-    public Product setCost(Double cost) {
-        this.cost = cost;
         return this;
     }
 

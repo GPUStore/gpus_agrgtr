@@ -1,7 +1,9 @@
-DROP TABLE IF EXISTS public.parameter;
 DROP TABLE IF EXISTS public.product;
+DROP TABLE IF EXISTS public.store;
+DROP TABLE IF EXISTS public.parameter;
 DROP TABLE IF EXISTS public.characteristic;
 
+CREATE SEQUENCE IF NOT EXISTS store_seq;
 CREATE SEQUENCE IF NOT EXISTS product_seq;
 CREATE SEQUENCE IF NOT EXISTS parameter_seq;
 CREATE SEQUENCE IF NOT EXISTS characteristic_seq;
@@ -17,10 +19,8 @@ CREATE TABLE IF NOT EXISTS public.product
 (
     product_id          VARCHAR(32)     NOT NULL DEFAULT NEXTVAL('product_seq'),
     name                VARCHAR(255)    NOT NULL,
-    cost                INT             NOT NULL,
     country             VARCHAR(255)    ,
     type                VARCHAR(32)     NOT NULL,
-    url                 VARCHAR(255)    NOT NULL,
     weight              INT             ,
     weight_with_box     INT             ,
 
@@ -40,3 +40,15 @@ CREATE TABLE IF NOT EXISTS public.parameter
     CONSTRAINT pp_product_fk            FOREIGN KEY (product_id)        REFERENCES product          (product_id),
     CONSTRAINT pp_characteristic_fk     FOREIGN KEY (characteristic_id) REFERENCES characteristic   (characteristic_id)
 );
+
+CREATE TABLE IF NOT EXISTS public.store
+(
+    store_id            VARCHAR(32)     NOT NULL DEFAULT NEXTVAL('store_seq'),
+    cost                INT             NOT NULL,
+    name                VARCHAR(255)    NOT NULL,
+    url                 VARCHAR(255)    NOT NULL,
+    product_id          VARCHAR(32)     NOT NULL,
+
+    CONSTRAINT store_pkey               PRIMARY KEY (store_id),
+    CONSTRAINT pp_product_fk            FOREIGN KEY (product_id)        REFERENCES product          (product_id)
+)

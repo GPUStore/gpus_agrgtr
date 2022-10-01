@@ -14,6 +14,7 @@ import ru.mephi.gpus_agrgtr.rest.repositories.ParameterRepository;
 import ru.mephi.gpus_agrgtr.rest.repositories.ProductRepository;
 
 import java.util.List;
+import java.util.Optional;
 
 @Service
 @Slf4j
@@ -24,10 +25,15 @@ public class ProductService {
 
     public void save(List<Product> products) {
         for (Product product : products) {
-            for (Parameter parameter : product.getParameters()) {
-                parameter.setProduct(product);
+            Optional<Product> optionalProduct = productRepository.findProductByName(product.getName());
+            if (optionalProduct.isPresent()) {
+                optionalProduct.get().getStore().addAll(product.getStore().stream().peek(store -> store.setProduct(optionalProduct.get())).toList());
+                productRepository.save(optionalProduct.get());
+            } else {
+                product.getParameters().stream().forEach(parameter -> parameter.setProduct(product));
+                product.getStore().stream().forEach(store -> store.setProduct(product));
+                productRepository.save(product);
             }
-            productRepository.save(product);
         }
         System.out.println();
     }
