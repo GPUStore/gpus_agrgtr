@@ -21,8 +21,8 @@ CREATE TABLE IF NOT EXISTS public.product
     name                VARCHAR(255)    NOT NULL,
     country             VARCHAR(255)    ,
     type                VARCHAR(32)     NOT NULL,
-    weight              INT             ,
-    weight_with_box     INT             ,
+    weight              NUMERIC         ,
+    weight_with_box     NUMERIC         ,
 
     CONSTRAINT product_pkey PRIMARY KEY (product_id)
 );

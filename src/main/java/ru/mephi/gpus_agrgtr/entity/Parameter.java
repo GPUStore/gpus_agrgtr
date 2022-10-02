@@ -18,16 +18,13 @@ public class Parameter {
     @GenericGenerator(name="system_uuid", strategy = "uuid")
     @Column(name = "parameter_id", length = 32)
     private String id;
-
     @Column(name = "name")
     private String name;
     @Column(name = "value", length = 512)
     private String value;
-
     @ManyToOne
     @JoinColumn(name = "product_id")
     private Product product;
-
     @ManyToOne
     @JoinColumn(name = "characteristic_id", nullable = false)
     private Characteristic characteristic;
