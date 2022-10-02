@@ -18,11 +18,9 @@ logging:
   pattern:
     console: "%d{yyyy-MM-dd HH:mm:ss} - %msg%n"
 
-url:
-  technopark:
+technopark:
+  name: Technopark
+  url:
     list: https://www.technopark.ru/videokarty/?p=%d
     base: https://www.technopark.ru/
     product: https://www.technopark.ru/graphql/
-  mvideo:
-  citilink:
-  dns:
