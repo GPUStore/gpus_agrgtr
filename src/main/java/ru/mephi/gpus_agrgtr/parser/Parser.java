@@ -18,10 +18,12 @@ import java.util.List;
 @Slf4j
 public abstract class Parser {
     protected String url;
+    protected String storeName;
     protected ObjectMapper mapper;
 
-    public Parser(String url, ObjectMapper mapper) {
+    public Parser(String url, String storeName, ObjectMapper mapper) {
         this.url = url;
+        this.storeName = storeName;
         this.mapper = mapper;
     }
 
@@ -35,7 +37,7 @@ public abstract class Parser {
         }
     }
 
-    protected Document get(String url){
+    public Document get(String url){
         try {
             return Jsoup.connect(url).get();
         } catch (IOException e) {
@@ -43,7 +45,7 @@ public abstract class Parser {
         }
     }
 
-    protected <T> T post(String requestLink, String requestBody, Class<T> classT){
+    public  <T> T post(String requestLink, String requestBody, Class<T> classT){
         try {
             String json = Jsoup.connect(requestLink)
                     .ignoreContentType(true)

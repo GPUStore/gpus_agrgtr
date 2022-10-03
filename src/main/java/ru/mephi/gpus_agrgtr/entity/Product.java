@@ -20,21 +20,20 @@ public class Product {
     @Column(name = "name")
     private String name;
     @OneToMany(mappedBy = "product", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
-    private List<Store> store;
+    private List<Store> stores;
     @Column(name = "country")
     private String country;
     @Column(name = "weight")
     private double weight;
     @Column(name = "weight_with_box")
     private double weightWithBox;
-
     @OneToMany(mappedBy = "product", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     private List<Parameter> parameters;
     @Enumerated(EnumType.STRING)
     private Type type;
 
-    public Product setStore(List<Store> store) {
-        this.store = store;
+    public Product setStores(List<Store> store) {
+        this.stores = store;
         return this;
     }
 
