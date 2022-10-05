@@ -38,7 +38,7 @@ class TechnoparkParserTest extends AbstractParserTest {
             "           width __typename } __typename }}\"" +
             "}";
     private static final String TEST_URL_FOR_INCORRECT_HTML = "src/test/repository/technopark/technoparkIncorrect.html";
-    private static final String TEST_URL_FOR_CORRECT_HTML = "src/test/repository/technopark/technopark.html";
+    private static final String TEST_URL_FOR_CORRECT_HTML = "src/test/repository/technopark/technoparkCorrect.html";
     private static final String TEST_URL_FOR_DATA_1 = "src/test/repository/technopark/technopark1.json";
     private static final String TEST_URL_FOR_DATA_2 = "src/test/repository/technopark/technopark2.json";
 
