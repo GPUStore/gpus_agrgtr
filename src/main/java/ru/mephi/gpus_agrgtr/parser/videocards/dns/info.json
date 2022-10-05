@@ -1,0 +1,35 @@
+{
+  "result": true,
+  "data": {
+    "@context": "https://schema.org/",
+    "@type": "Product",
+    "name": "Видеокарта PowerColor AMD Radeon R7 240 [AXR7 240 2GBD5-HLEV2]",
+    "description": "Видеокарта PowerColor AMD Radeon R7 240 является оптимальной по возможностям моделью для домашнего компьютера с определенной игровой направленностью. Этот компактный и малошумный видеопроцессор получил поддержку важных для обработки графики стандартов DirectX 11.1 и OpenGL 4.5. При установке в системном блоке он займет один порт PCI-E 3.0 и потребует БП с мощностью минимум 400 Вт при собственном часовом расходе энергии всего 75 Вт.",
+    "sku": "4879013",
+    "offers": {
+      "@type": "Offer",
+      "url": "https://www.dns-shop.ru/product/8c12d3e82d96ed20/videokarta-powercolor-amd-radeon-r7-240-axr7-240-2gbd5-hlev2/",
+      "availability": "https://schema.org/InStock",
+      "price": 3399,
+      "priceCurrency": "RUB"
+    },
+    "aggregateRating": {
+      "@type": "AggregateRating",
+      "ratingValue": 4.28,
+      "worstRating": 0,
+      "bestRating": 5,
+      "reviewCount": 76
+    },
+    "image": [
+      "https://c.dns-shop.ru/thumb/st4/fit/300/300/b9b80be17081ba32d31b6462cc8320ee/b1a27e4c29c7c86a51b6f28685ee67913a27b6666af7b283c2bfb87bc30c6748.jpg",
+      "https://c.dns-shop.ru/thumb/st4/fit/300/300/113ccea4b9d89940751d5096d941eef7/4507d272d680384d5b538edfdc9197a313cf74f8d4922cde89f3013b789c2c53.jpg",
+      "https://c.dns-shop.ru/thumb/st4/fit/300/300/af75168ffc5e5b1ac14708e14fc51baa/a95f3a13f390d3f345bdf830c8ed9bdc1db167c1dce429c4a831748e064871fc.jpg"
+    ],
+    "brand": {
+      "@type": "Brand",
+      "name": "PowerColor"
+    }
+  },
+  "message": "",
+  "errors": []
+}

@@ -1,0 +1,900 @@
+{
+  "metadata": {
+    "name": "видеокарты",
+    "catalog_type": "subject",
+    "catalog_value": "subject=3274"
+  },
+  "state": 0,
+  "data": {
+    "filters": [
+      {
+        "name": "Срок доставки",
+        "key": "fdlvr"
+      },
+      {
+        "name": "Бренд",
+        "key": "ftopbrand",
+        "items": [
+          {
+            "id": 28901,
+            "name": "Palit",
+            "count": 164
+          },
+          {
+            "id": 28928,
+            "name": "Gigabyte",
+            "count": 148
+          },
+          {
+            "id": 27445,
+            "name": "MSI",
+            "count": 64
+          },
+          {
+            "id": 5786,
+            "name": "Asus",
+            "count": 59
+          },
+          {
+            "id": 34420,
+            "name": "Colorful",
+            "count": 25
+          },
+          {
+            "id": 34540,
+            "name": "NO NAME",
+            "count": 5
+          },
+          {
+            "id": 176010,
+            "name": "PROgadget",
+            "count": 3
+          }
+        ],
+        "isFull": false
+      },
+      {
+        "name": "Продавец",
+        "key": "ftopsupplier",
+        "items": [
+          {
+            "id": -100,
+            "name": "Wildberries",
+            "count": 168
+          },
+          {
+            "id": 466700,
+            "name": "ООО ТЕХНОЛОГИИ И ПРОЕКТЫ",
+            "count": 18
+          },
+          {
+            "id": 330888,
+            "name": "Roo24.ru",
+            "count": 16
+          },
+          {
+            "id": 67466,
+            "name": "ООО \"МАРВЕЛ ФС\"",
+            "count": 11
+          },
+          {
+            "id": 18740,
+            "name": "БИ-ТРЕЙД ООО",
+            "count": 8
+          },
+          {
+            "id": 291712,
+            "name": "ООО МАГ ДЕВАЙС",
+            "count": 2
+          },
+          {
+            "id": 38724,
+            "name": "EXTEGO",
+            "count": 1
+          }
+        ],
+        "isFull": false
+      },
+      {
+        "name": "Цена",
+        "key": "priceU",
+        "minPriceU": 22900,
+        "maxPriceU": 46999000
+      },
+      {
+        "name": "Скидка",
+        "key": "discount",
+        "multiselect": 0,
+        "items": [
+          {
+            "id": 10,
+            "name": "от 10% и выше"
+          },
+          {
+            "id": 30,
+            "name": "от 30% и выше"
+          },
+          {
+            "id": 50,
+            "name": "от 50% и выше"
+          },
+          {
+            "id": 70,
+            "name": "от 70% и выше"
+          }
+        ]
+      },
+      {
+        "name": "Производитель видеопроцессора",
+        "key": "f202100",
+        "items": [
+          {
+            "id": 202101,
+            "name": "AMD",
+            "count": 90
+          },
+          {
+            "id": 7509889,
+            "name": "Asus",
+            "count": 1
+          },
+          {
+            "id": 6042678,
+            "name": "GIGABYTE",
+            "count": 3
+          },
+          {
+            "id": 202646,
+            "name": "NVIDIA",
+            "count": 396
+          },
+          {
+            "id": 608964,
+            "name": "Palit",
+            "count": 8
+          }
+        ]
+      },
+      {
+        "name": "Видеопроцессор",
+        "key": "f4665",
+        "items": [
+          {
+            "id": 120086,
+            "name": "AMD Radeon RX 550",
+            "count": 1
+          },
+          {
+            "id": 14568828,
+            "name": "AMD Radeon RX 6400",
+            "count": 2
+          },
+          {
+            "id": 14568826,
+            "name": "AMD Radeon RX 6500 XT",
+            "count": 4
+          },
+          {
+            "id": 9635219,
+            "name": "AMD Radeon RX 6600",
+            "count": 6
+          },
+          {
+            "id": 3651090,
+            "name": "AMD Radeon RX 6700 XT",
+            "count": 24
+          },
+          {
+            "id": 534279,
+            "name": "AMD Radeon RX 6900 XT",
+            "count": 10
+          },
+          {
+            "id": 120088,
+            "name": "nVidia GeForce GT 1030",
+            "count": 7
+          },
+          {
+            "id": 131362,
+            "name": "nVidia GeForce GT 710",
+            "count": 1
+          },
+          {
+            "id": 120089,
+            "name": "nVidia GeForce GT 730",
+            "count": 11
+          },
+          {
+            "id": 120090,
+            "name": "nVidia GeForce GTX 1050",
+            "count": 1
+          },
+          {
+            "id": 131363,
+            "name": "nVidia GeForce GTX 1050 Ti",
+            "count": 8
+          },
+          {
+            "id": 165956,
+            "name": "nVidia GeForce GTX 1650",
+            "count": 11
+          },
+          {
+            "id": 146678,
+            "name": "nVidia GeForce GTX 1660",
+            "count": 1
+          },
+          {
+            "id": 202476,
+            "name": "nVidia GeForce GTX 1660 Super",
+            "count": 12
+          },
+          {
+            "id": 165957,
+            "name": "nVidia GeForce GTX 1660 Ti",
+            "count": 11
+          },
+          {
+            "id": 135234,
+            "name": "nVidia GeForce RTX 2060",
+            "count": 5
+          },
+          {
+            "id": 400135,
+            "name": "nVidia GeForce RTX 3070",
+            "count": 47
+          },
+          {
+            "id": 4668557,
+            "name": "nVidia GeForce RTX 3070 Ti",
+            "count": 19
+          },
+          {
+            "id": 400134,
+            "name": "nVidia GeForce RTX 3080",
+            "count": 2
+          },
+          {
+            "id": 4669522,
+            "name": "nVidia GeForce RTX 3080 Ti",
+            "count": 9
+          },
+          {
+            "id": 400136,
+            "name": "nVidia GeForce RTX 3090",
+            "count": 8
+          },
+          {
+            "id": 5824674,
+            "name": "TU116",
+            "count": 2
+          }
+        ]
+      },
+      {
+        "name": "Объем памяти видеоадаптера",
+        "key": "f74650",
+        "items": [
+          {
+            "id": 6019582,
+            "name": "1 ГБ",
+            "count": 12
+          },
+          {
+            "id": 440493,
+            "name": "2 ГБ",
+            "count": 40
+          },
+          {
+            "id": 467645,
+            "name": "4 Гб",
+            "count": 58
+          },
+          {
+            "id": 10419066,
+            "name": "5 Гб",
+            "count": 1
+          },
+          {
+            "id": 440521,
+            "name": "6 Гб",
+            "count": 47
+          },
+          {
+            "id": 1136023,
+            "name": "8 Гб",
+            "count": 184
+          },
+          {
+            "id": 4672157,
+            "name": "10 Гб",
+            "count": 45
+          },
+          {
+            "id": 1136524,
+            "name": "12 Гб",
+            "count": 113
+          },
+          {
+            "id": 580818,
+            "name": "16 Гб",
+            "count": 21
+          },
+          {
+            "id": 3184831,
+            "name": "24 Гб",
+            "count": 15
+          },
+          {
+            "id": 10418137,
+            "name": "32 гб",
+            "count": 1
+          },
+          {
+            "id": 80582,
+            "name": "1024 Мб",
+            "count": 2
+          },
+          {
+            "id": 80583,
+            "name": "2048 Мб",
+            "count": 4
+          },
+          {
+            "id": 80585,
+            "name": "4096 Мб",
+            "count": 5
+          },
+          {
+            "id": 125971,
+            "name": "6144 Мб",
+            "count": 8
+          },
+          {
+            "id": 80586,
+            "name": "8192 Мб",
+            "count": 10
+          },
+          {
+            "id": 384933,
+            "name": "10240 Мб",
+            "count": 1
+          },
+          {
+            "id": 608963,
+            "name": "12288 Мб",
+            "count": 5
+          },
+          {
+            "id": 418511,
+            "name": "24576 Мб",
+            "count": 1
+          }
+        ]
+      },
+      {
+        "name": "Тип видеопамяти",
+        "key": "f125810",
+        "items": [
+          {
+            "id": 167930,
+            "name": "DDR3",
+            "count": 4
+          },
+          {
+            "id": 9196154,
+            "name": "DDR4",
+            "count": 3
+          },
+          {
+            "id": 229641,
+            "name": "DDR6",
+            "count": 3
+          },
+          {
+            "id": 125812,
+            "name": "GDDR",
+            "count": 3
+          },
+          {
+            "id": 125813,
+            "name": "GDDR2",
+            "count": 1
+          },
+          {
+            "id": 125814,
+            "name": "GDDR3",
+            "count": 14
+          },
+          {
+            "id": 125815,
+            "name": "GDDR4",
+            "count": 4
+          },
+          {
+            "id": 125817,
+            "name": "GDDR5",
+            "count": 43
+          },
+          {
+            "id": 125819,
+            "name": "GDDR6",
+            "count": 368
+          }
+        ]
+      },
+      {
+        "name": "Разрядность шины",
+        "key": "f125830",
+        "items": [
+          {
+            "id": 131321,
+            "name": "64 бит",
+            "count": 49
+          },
+          {
+            "id": 125832,
+            "name": "128 бит",
+            "count": 94
+          },
+          {
+            "id": 125834,
+            "name": "160 бит",
+            "count": 2
+          },
+          {
+            "id": 125835,
+            "name": "192 бит",
+            "count": 126
+          },
+          {
+            "id": 125837,
+            "name": "256 бит",
+            "count": 150
+          },
+          {
+            "id": 125838,
+            "name": "320 бит",
+            "count": 45
+          },
+          {
+            "id": 125841,
+            "name": "384 бит",
+            "count": 28
+          }
+        ]
+      },
+      {
+        "name": "Вид разъема",
+        "key": "f14081",
+        "items": [
+          {
+            "id": 198568,
+            "name": "D-Sub",
+            "count": 1
+          },
+          {
+            "id": 22310,
+            "name": "DisplayPort",
+            "count": 166
+          },
+          {
+            "id": 3192974,
+            "name": "DP",
+            "count": 5
+          },
+          {
+            "id": 22308,
+            "name": "DVI",
+            "count": 54
+          },
+          {
+            "id": 22313,
+            "name": "HDMI",
+            "count": 210
+          },
+          {
+            "id": 114687,
+            "name": "HDMI 2.0",
+            "count": 1
+          },
+          {
+            "id": 236167,
+            "name": "HDMI 2.1",
+            "count": 2
+          },
+          {
+            "id": 117388,
+            "name": "Lightning",
+            "count": 9
+          },
+          {
+            "id": 146056,
+            "name": "PCI",
+            "count": 51
+          },
+          {
+            "id": 128522,
+            "name": "PCI-e",
+            "count": 98
+          },
+          {
+            "id": 90254,
+            "name": "VGA",
+            "count": 10
+          }
+        ]
+      },
+      {
+        "name": "Интерфейс",
+        "key": "f13894",
+        "items": [
+          {
+            "id": 3409973,
+            "name": "DisplayPort",
+            "count": 78
+          },
+          {
+            "id": 595494,
+            "name": "DVI",
+            "count": 3
+          },
+          {
+            "id": 5918024,
+            "name": "DVI-D",
+            "count": 9
+          },
+          {
+            "id": 100264,
+            "name": "HDMI",
+            "count": 82
+          },
+          {
+            "id": 478288,
+            "name": "Mini DisplayPort",
+            "count": 1
+          },
+          {
+            "id": 22076,
+            "name": "PCI",
+            "count": 3
+          },
+          {
+            "id": 22077,
+            "name": "PCI-E",
+            "count": 380
+          },
+          {
+            "id": 514627,
+            "name": "SATA",
+            "count": 1
+          },
+          {
+            "id": 148000,
+            "name": "Thunderbolt 3",
+            "count": 1
+          },
+          {
+            "id": 356214,
+            "name": "VGA",
+            "count": 1
+          }
+        ]
+      },
+      {
+        "name": "Питание видеокарты",
+        "key": "f125852",
+        "items": [
+          {
+            "id": 10328949,
+            "name": "Molex",
+            "count": 1
+          },
+          {
+            "id": 5257266,
+            "name": "PCI-E v4.0",
+            "count": 2
+          },
+          {
+            "id": 14116485,
+            "name": "sata",
+            "count": 1
+          },
+          {
+            "id": 10878107,
+            "name": "без доп. питания",
+            "count": 1
+          },
+          {
+            "id": 125858,
+            "name": "без дополнительного питания",
+            "count": 8
+          },
+          {
+            "id": 1132307,
+            "name": "нет",
+            "count": 16
+          },
+          {
+            "id": 10986823,
+            "name": "от материнской платы",
+            "count": 7
+          },
+          {
+            "id": 80117264,
+            "name": "1x 8 pin, 1x 6 pin",
+            "count": 1
+          },
+          {
+            "id": 3995998,
+            "name": "2 x 8-pin",
+            "count": 4
+          },
+          {
+            "id": 9440534,
+            "name": "2 х 8-pin",
+            "count": 4
+          },
+          {
+            "id": 14854064,
+            "name": "2*8Pin",
+            "count": 2
+          },
+          {
+            "id": 125853,
+            "name": "6 pin",
+            "count": 19
+          },
+          {
+            "id": 125854,
+            "name": "6+8 pin",
+            "count": 2
+          },
+          {
+            "id": 61428977,
+            "name": "6-pin",
+            "count": 5
+          },
+          {
+            "id": 14892235,
+            "name": "6-pin + 8-pin x2",
+            "count": 1
+          },
+          {
+            "id": 14116593,
+            "name": "6pin",
+            "count": 5
+          },
+          {
+            "id": 9537437,
+            "name": "8 + 8 + 8 pin",
+            "count": 2
+          },
+          {
+            "id": 5257267,
+            "name": "8 + 8 pin",
+            "count": 16
+          },
+          {
+            "id": 125855,
+            "name": "8 pin",
+            "count": 103
+          },
+          {
+            "id": 9121497,
+            "name": "8 pin + 6 pin",
+            "count": 13
+          },
+          {
+            "id": 546852,
+            "name": "8 pin + 8 pin",
+            "count": 19
+          },
+          {
+            "id": 86968788,
+            "name": "8",
+            "count": 1
+          },
+          {
+            "id": 86966775,
+            "name": "8 pin x 1",
+            "count": 1
+          },
+          {
+            "id": 62839019,
+            "name": "8 pin+8 pin+6 pin",
+            "count": 1
+          },
+          {
+            "id": 3184827,
+            "name": "8 pin+8 pin+8 pin",
+            "count": 1
+          },
+          {
+            "id": 3650541,
+            "name": "8+6 pin",
+            "count": 1
+          },
+          {
+            "id": 125856,
+            "name": "8+8 pin",
+            "count": 3
+          },
+          {
+            "id": 3779215,
+            "name": "8-pin",
+            "count": 54
+          },
+          {
+            "id": 9568442,
+            "name": "8-pin + 6-pin",
+            "count": 13
+          },
+          {
+            "id": 11981894,
+            "name": "8-pin + 8-pin",
+            "count": 12
+          },
+          {
+            "id": 9631608,
+            "name": "8-pin x2",
+            "count": 54
+          },
+          {
+            "id": 13545940,
+            "name": "8-pin x3",
+            "count": 21
+          },
+          {
+            "id": 3779868,
+            "name": "8-pin+8-pin",
+            "count": 1
+          },
+          {
+            "id": 605282,
+            "name": "8pin",
+            "count": 12
+          },
+          {
+            "id": 62836691,
+            "name": "8pin + 6pin",
+            "count": 2
+          },
+          {
+            "id": 534281,
+            "name": "8pin + 8pin",
+            "count": 5
+          },
+          {
+            "id": 9572381,
+            "name": "8Pin + 8Pin + 8Pin",
+            "count": 1
+          },
+          {
+            "id": 14631350,
+            "name": "300 Вт",
+            "count": 2
+          },
+          {
+            "id": 13542413,
+            "name": "450 Вт",
+            "count": 1
+          },
+          {
+            "id": 5621260,
+            "name": "450W",
+            "count": 1
+          }
+        ]
+      },
+      {
+        "name": "Длина видеокарты",
+        "key": "f208521",
+        "items": [
+          {
+            "id": 208522,
+            "name": "до 149 мм",
+            "count": 3
+          },
+          {
+            "id": 208523,
+            "name": "150-169 мм",
+            "count": 27
+          },
+          {
+            "id": 208525,
+            "name": "200-239 мм",
+            "count": 46
+          },
+          {
+            "id": 208526,
+            "name": "240 мм и более",
+            "count": 144
+          }
+        ]
+      },
+      {
+        "name": "Рекомендуемая мощность блока питания",
+        "key": "f215696",
+        "items": [
+          {
+            "id": 11720773,
+            "name": "250 Вт",
+            "count": 2
+          },
+          {
+            "id": 215697,
+            "name": "300 Вт",
+            "count": 59
+          },
+          {
+            "id": 226424,
+            "name": "350 Вт",
+            "count": 8
+          },
+          {
+            "id": 215698,
+            "name": "400 Вт",
+            "count": 17
+          },
+          {
+            "id": 215699,
+            "name": "450 Вт",
+            "count": 46
+          },
+          {
+            "id": 215700,
+            "name": "500 Вт",
+            "count": 31
+          },
+          {
+            "id": 215946,
+            "name": "550 Вт",
+            "count": 92
+          },
+          {
+            "id": 215701,
+            "name": "600 Вт",
+            "count": 21
+          },
+          {
+            "id": 215703,
+            "name": "650 Вт",
+            "count": 74
+          },
+          {
+            "id": 215947,
+            "name": "700 Вт",
+            "count": 9
+          },
+          {
+            "id": 215948,
+            "name": "750 Вт",
+            "count": 82
+          },
+          {
+            "id": 545867,
+            "name": "800 Вт",
+            "count": 3
+          },
+          {
+            "id": 545484,
+            "name": "850 Вт",
+            "count": 19
+          },
+          {
+            "id": 3683697,
+            "name": "900 Вт",
+            "count": 2
+          },
+          {
+            "id": 4681544,
+            "name": "1000 Вт",
+            "count": 1
+          }
+        ]
+      }
+    ],
+    "total": 797
+  }
+}

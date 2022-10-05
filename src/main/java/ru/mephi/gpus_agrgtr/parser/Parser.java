@@ -59,5 +59,6 @@ public abstract class Parser {
         }
     }
 
+
     protected abstract List<Product> getAllProducts() throws Exception;
 }

@@ -20,6 +20,7 @@ public class ProductService {
 
     @Transactional
     public void save(List<Product> products) {
+        System.out.println(products);
         for (Product product : products) {
             Product prod = productRepository.findProductByName(product.getName()).orElse(null);
             if (null != prod) {

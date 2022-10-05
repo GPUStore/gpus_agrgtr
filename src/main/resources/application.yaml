@@ -3,7 +3,7 @@ server:
 
 spring:
   datasource:
-    url: jdbc:postgresql://localhost:5432/gpus_db
+    url: jdbc:postgresql://localhost:5433/gpus_db
     username: postgres
     password: postgres
     driverClassName: org.postgresql.Driver
@@ -18,9 +18,17 @@ logging:
   pattern:
     console: "%d{yyyy-MM-dd HH:mm:ss} - %msg%n"
 
-technopark:
-  name: Technopark
-  url:
+url:
+  technopark:
     list: https://www.technopark.ru/videokarty/?p=%d
     base: https://www.technopark.ru/
     product: https://www.technopark.ru/graphql/
+    name : technopark
+  mvideo:
+  citilink:
+  dns:
+    name: DNS Market
+    base: https://www.dns-shop.ru/
+    list: https://www.dns-shop.ru/catalog/17a89aab16404e77/videokarty/
+    product_micro_data: https://www.dns-shop.ru/product/microdata/8c12d3e8-2d96-11ec-8f06-00155d8ed20b/
+    example: https://www.dns-shop.ru/product/8c12d3e82d96ed20/videokarta-powercolor-amd-radeon-r7-240-axr7-240-2gbd5-hlev2/
