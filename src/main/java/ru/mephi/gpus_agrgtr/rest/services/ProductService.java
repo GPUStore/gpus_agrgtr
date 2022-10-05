@@ -23,7 +23,7 @@ public class ProductService {
         for (Product product : products) {
             Product prod = productRepository.findProductByName(product.getName()).orElse(null);
             if (null != prod) {
-
+                //todo если видеокарта есть, то добавить к ней новый магазин
             } else {
                 product.getParameters().forEach(parameter -> parameter.setProduct(product));
                 product.getStores().forEach(store -> store.setProduct(product));

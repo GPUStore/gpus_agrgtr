@@ -11,6 +11,7 @@ import ru.mephi.gpus_agrgtr.entity.Characteristic;
 import ru.mephi.gpus_agrgtr.entity.Product;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 
 @Component
@@ -33,19 +34,20 @@ public abstract class Parser {
         try {
             return getAllProducts();
         } catch (Exception e) {
-            throw new RuntimeException(e);
+            log.info("Page parsing failed: " + url + '\n' + e.getMessage());
+            return new ArrayList<>();
         }
     }
 
-    public Document get(String url){
+    public Document get(String url) {
         try {
             return Jsoup.connect(url).get();
         } catch (IOException e) {
-            return new Document("");
+            throw new RuntimeException("Can not parse this page: " + url);
         }
     }
 
-    public  <T> T post(String requestLink, String requestBody, Class<T> classT){
+    public <T> T post(String requestLink, String requestBody, Class<T> classT) {
         try {
             String json = Jsoup.connect(requestLink)
                     .ignoreContentType(true)
@@ -54,7 +56,7 @@ public abstract class Parser {
                     .execute()
                     .body();
             return mapper.readValue(json, classT);
-        } catch (IOException e) {
+        } catch (Exception e) {
             throw new RuntimeException(e);
         }
     }
