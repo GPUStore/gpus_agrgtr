@@ -27,10 +27,11 @@ public class ProductService {
     public void save(List<Product> products) {
         for (Product product : products) {
             Product prod = productRepository.findProductByName(product.getName()).orElse(null);
-            if (prod == null){
+
+            if (prod == null) {
                 prod = categoryService.findProductByCategories(product);
-                if(prod != null){
-                    Logger.getGlobal().log(Level.ALL, "found product by categories");
+                if (prod != null) {
+                    log.info("found product by categories:" + product.getName() + "=" + prod.getName());
                 }
             }
             if (prod == null) {
