@@ -11,4 +11,6 @@ public interface CategoryExtractor {
     Set<Category> extractCategorySet(String name);
 
     String extractProductCode(String name);
+
+    Boolean AreEqual(Set<Category> first, Set<Category> second);
 }

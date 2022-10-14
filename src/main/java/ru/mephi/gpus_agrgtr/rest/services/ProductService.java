@@ -6,11 +6,12 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import ru.mephi.gpus_agrgtr.entity.Category;
 import ru.mephi.gpus_agrgtr.entity.Product;
-import ru.mephi.gpus_agrgtr.rest.repositories.CategoryRepository;
 import ru.mephi.gpus_agrgtr.rest.repositories.ProductRepository;
 
 import java.util.List;
 import java.util.Set;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 @Service
 @Slf4j
@@ -26,9 +27,13 @@ public class ProductService {
     public void save(List<Product> products) {
         for (Product product : products) {
             Product prod = productRepository.findProductByName(product.getName()).orElse(null);
-            if (prod != null) {
-
-            } else {
+            if (prod == null){
+                prod = categoryService.findProductByCategories(product);
+                if(prod != null){
+                    Logger.getGlobal().log(Level.ALL, "found product by categories");
+                }
+            }
+            if (prod == null) {
                 Set<Category> categorySet = categoryService.getCategories(product);
                 categorySet.forEach(category -> category.addProduct(product));
                 product.addCategories(categorySet);
@@ -37,6 +42,7 @@ public class ProductService {
                 categoryService.saveInRepository(categorySet);
                 productRepository.save(product);
             }
+            //prod.addStore(product.getStore)
         }
         System.out.println();
     }
