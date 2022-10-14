@@ -1,7 +1,8 @@
-DROP TABLE IF EXISTS public.product;
-DROP TABLE IF EXISTS public.store;
-DROP TABLE IF EXISTS public.parameter;
-DROP TABLE IF EXISTS public.characteristic;
+DROP TABLE IF EXISTS public.product CASCADE;
+DROP TABLE IF EXISTS public.store CASCADE;
+DROP TABLE IF EXISTS public.parameter CASCADE;
+DROP TABLE IF EXISTS public.characteristic CASCADE;
+
 
 CREATE SEQUENCE IF NOT EXISTS store_seq;
 CREATE SEQUENCE IF NOT EXISTS product_seq;
@@ -52,3 +53,6 @@ CREATE TABLE IF NOT EXISTS public.store
     CONSTRAINT store_pkey               PRIMARY KEY (store_id),
     CONSTRAINT pp_product_fk            FOREIGN KEY (product_id)        REFERENCES product          (product_id)
 )
+
+
+

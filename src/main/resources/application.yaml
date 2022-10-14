@@ -13,7 +13,7 @@ spring:
   properties:
     hibernate:
       format_sql: true
-
+      ddl-auto: create
 logging:
   pattern:
     console: "%d{yyyy-MM-dd HH:mm:ss} - %msg%n"
