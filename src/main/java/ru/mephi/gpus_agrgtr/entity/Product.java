@@ -5,6 +5,7 @@ import lombok.EqualsAndHashCode;
 import org.hibernate.annotations.GenericGenerator;
 
 import javax.persistence.*;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
@@ -55,7 +56,10 @@ public class Product {
     }
 
     public void addCategories(Set<Category> categorySet){
-
+        if(categories == null) {
+            categories = new HashSet<>();
+        }
+        categories.addAll(categorySet);
     }
 
 
