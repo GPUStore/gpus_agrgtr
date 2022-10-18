@@ -5,13 +5,12 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.Mock;
 import org.mockito.Mockito;
-import org.mockito.Spy;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.http.converter.json.Jackson2ObjectMapperBuilder;
 import ru.mephi.gpus_agrgtr.entity.Characteristic;
 import ru.mephi.gpus_agrgtr.entity.Product;
+import ru.mephi.gpus_agrgtr.entity.Store;
 import ru.mephi.gpus_agrgtr.parser.videocards.entity.Response;
 import ru.mephi.gpus_agrgtr.parser.videocards.test.AbstractParserTest;
 import ru.mephi.gpus_agrgtr.parser.videocards.technopark.TechnoparkParser;
@@ -20,7 +19,7 @@ import ru.mephi.gpus_agrgtr.parser.videocards.test.TestData;
 import java.io.IOException;
 import java.util.List;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.*;
 
 @ExtendWith(MockitoExtension.class)
 class TechnoparkParserTest extends AbstractParserTest {
@@ -81,4 +80,18 @@ class TechnoparkParserTest extends AbstractParserTest {
         assertEquals(expectedProducts.size(), actualProducts.size());
         assertProducts(expectedProducts.get(0), actualProducts.get(0));
     }
+
+    @Test
+    void addingStores() throws IOException {
+        Mockito.doReturn(getTestDocument("src/test/repository/technopark/technopark.html"))
+                .when(technoparkParser).get(String.format(URL_FOR_HTML_PAGE, 1));
+        Mockito.doReturn(getObjectMapper().readValue(getTestJsonString("src/test/repository/technopark/technopark1.json"), Response.class))
+                .when(technoparkParser).post(URL_FOR_DATA, String.format(REQUEST, 1), Response.class);
+        Mockito.doReturn(getObjectMapper().readValue(getTestJsonString("src/test/repository/technopark/technopark1.json"), Response.class))
+                .when(technoparkParser).post(URL_FOR_DATA, String.format(REQUEST, 2), Response.class);
+        Product product = technoparkParser.getAllProducts().get(0);
+        List<Store> stores =  product.getStores();
+        product.getStores().add(new Store());// unable to add store
+    }
+
 }
