@@ -35,7 +35,6 @@ public class Product {
     private Type type;
     @ManyToMany(cascade =
             {
-                    CascadeType.DETACH,
                     CascadeType.MERGE,
                     CascadeType.REFRESH,
                     CascadeType.PERSIST
@@ -55,13 +54,13 @@ public class Product {
         return this;
     }
 
-    public void addCategories(Set<Category> categorySet){
+    public Product addCategories(Set<Category> categorySet){
         if(categories == null) {
             categories = new HashSet<>();
         }
         categories.addAll(categorySet);
+        return this;
     }
-
 
     public Product setId(String id) {
         this.id = id;

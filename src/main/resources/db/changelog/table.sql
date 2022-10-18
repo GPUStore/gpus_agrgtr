@@ -2,7 +2,8 @@ DROP TABLE IF EXISTS public.product CASCADE;
 DROP TABLE IF EXISTS public.store CASCADE;
 DROP TABLE IF EXISTS public.parameter CASCADE;
 DROP TABLE IF EXISTS public.characteristic CASCADE;
-
+DROP TABLE IF EXISTS public.category CASCADE ;
+DROP TABLE IF EXISTS public.products_categories CASCADE;
 
 CREATE SEQUENCE IF NOT EXISTS store_seq;
 CREATE SEQUENCE IF NOT EXISTS product_seq;
@@ -36,7 +37,6 @@ CREATE TABLE IF NOT EXISTS public.parameter
     product_id          VARCHAR(32)     NOT NULL,
     characteristic_id   VARCHAR(255)    NOT NULL,
 
-
     CONSTRAINT parameter_pkey           PRIMARY KEY (parameter_id),
     CONSTRAINT pp_product_fk            FOREIGN KEY (product_id)        REFERENCES product          (product_id),
     CONSTRAINT pp_characteristic_fk     FOREIGN KEY (characteristic_id) REFERENCES characteristic   (characteristic_id)
@@ -52,7 +52,29 @@ CREATE TABLE IF NOT EXISTS public.store
 
     CONSTRAINT store_pkey               PRIMARY KEY (store_id),
     CONSTRAINT pp_product_fk            FOREIGN KEY (product_id)        REFERENCES product          (product_id)
-)
+);
 
 
 
+CREATE TABLE IF NOT EXISTS public.category
+
+
+(
+    name                VARCHAR(255)    NOT NULL,
+    category_id         INT             NOT NULL,
+
+    CONSTRAINT category_pkey            PRIMARY KEY (category_id)
+);
+
+CREATE TABLE IF NOT EXISTS public.products_categories
+(
+    category_id         INT             NOT NULL,
+    product_id          VARCHAR(32)     NOT NULL,
+
+    CONSTRAINT category_fk              FOREIGN KEY (category_id)       REFERENCES category   (category_id),
+    CONSTRAINT product_fk               FOREIGN KEY (product_id)        REFERENCES product  (product_id)
+);
+
+ALTER TABLE IF EXISTS public.category
+ALTER COLUMN "category_id"
+    ADD GENERATED ALWAYS AS IDENTITY ( INCREMENT 1 START 0 MINVALUE 0 );

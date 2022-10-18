@@ -10,14 +10,10 @@ spring:
   jpa:
     show-sql: true
     open-in-view: false
-  properties:
-    hibernate:
-      format_sql: true
-      ddl-auto: create
+
 logging:
   pattern:
     console: "%d{yyyy-MM-dd HH:mm:ss} - %msg%n"
-
   level:
     root: info
     org:

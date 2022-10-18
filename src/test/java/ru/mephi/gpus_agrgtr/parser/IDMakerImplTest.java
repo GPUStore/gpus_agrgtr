@@ -2,7 +2,7 @@ package ru.mephi.gpus_agrgtr.parser;
 
 import org.junit.jupiter.api.Test;
 import ru.mephi.gpus_agrgtr.entity.Category;
-import ru.mephi.gpus_agrgtr.category.CategoryExtractorImpl;
+import ru.mephi.gpus_agrgtr.category.CategoryExtractor;
 
 import java.util.Set;
 import java.util.stream.Collectors;
@@ -12,17 +12,17 @@ import static org.junit.jupiter.api.Assertions.*;
 class IDMakerImplTest {
 
 
-    private CategoryExtractorImpl idMaker = new CategoryExtractorImpl();
+    private CategoryExtractor categoryExtractor = new CategoryExtractor();
     final String name = "GIGABYTE GEFORCE GTX1660TI 6GB (GV-N166TOC-6GD)";
 
     @Test
     void extractProductCode() {
-        assertEquals("GV-N166TOC-6GD", idMaker.extractProductCode(name));
+        assertEquals("GV-N166TOC-6GD", categoryExtractor.extractProductCode(name));
     }
 
     @Test
     void getCategoryList() {
-        Set<Category> categorySet = idMaker.extractCategorySet(name);
+        Set<Category> categorySet = categoryExtractor.extractCategorySet(name);
         Set<String> names = categorySet.stream().map(Category::getName).collect(Collectors.toSet());
         assertTrue(names.contains("GIGABYTE"));
         assertTrue(names.contains("GEFORCE"));

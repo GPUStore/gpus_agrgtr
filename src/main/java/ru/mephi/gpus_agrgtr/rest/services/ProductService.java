@@ -7,11 +7,8 @@ import org.springframework.transaction.annotation.Transactional;
 import ru.mephi.gpus_agrgtr.entity.Category;
 import ru.mephi.gpus_agrgtr.entity.Product;
 import ru.mephi.gpus_agrgtr.rest.repositories.ProductRepository;
-
 import java.util.List;
 import java.util.Set;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
 @Service
 @Slf4j
@@ -19,9 +16,7 @@ import java.util.logging.Logger;
 public class ProductService {
 
     private final ProductRepository productRepository;
-
     private final CategoryService categoryService;
-
 
     @Transactional
     public void save(List<Product> products) {
@@ -37,13 +32,12 @@ public class ProductService {
             if (prod == null) {
                 Set<Category> categorySet = categoryService.getCategories(product);
                 categorySet.forEach(category -> category.addProduct(product));
-                product.addCategories(categorySet);
-                product.getParameters().forEach(parameter -> parameter.setProduct(product));
+                product.addCategories(categorySet)
+                        .getParameters().forEach(parameter -> parameter.setProduct(product));
                 product.getStores().forEach(store -> store.setProduct(product));
                 categoryService.saveInRepository(categorySet);
                 productRepository.save(product);
             }
-            //prod.addStore(product.getStore)
         }
         System.out.println();
     }

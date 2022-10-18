@@ -10,18 +10,16 @@ import java.util.List;
 @Getter
 @Table(name = "category")
 public class Category {
-
-
     @Column(name = "name")
     private String name;
 
     @Id
     @Column(name = "category_id")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int number;
+    private int category_id;
 
     public Category() {
-
+        products = new ArrayList<>();
     }
     @ManyToMany()
     @JoinTable(
@@ -32,7 +30,7 @@ public class Category {
                     name = "category_id", referencedColumnName = "category_id")
 
     )
-    private final List<Product> products = new ArrayList<>();
+    private final List<Product> products;
 
     public void addProduct(Product product){
         products.add(product);
@@ -40,20 +38,15 @@ public class Category {
 
     public Category(String name) {
         this.name = name;
-
+        products = new ArrayList<>();
     }
-
 
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
-
         Category category = (Category) o;
-
-        if (!name.equals(category.name)) return false;
-
-        return true;
+        return name.equals(category.name);
     }
 
     @Override

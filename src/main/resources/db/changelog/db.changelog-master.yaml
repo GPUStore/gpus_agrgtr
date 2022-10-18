@@ -3,5 +3,4 @@ databaseChangeLog:
       file: db/changelog/table.sql
   - include:
       file: db/changelog/data.sql
-  - include:
-      file: db/changelog/adding-categories.sql
+
