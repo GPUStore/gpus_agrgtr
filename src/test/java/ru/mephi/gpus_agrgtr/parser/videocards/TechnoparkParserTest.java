@@ -94,4 +94,17 @@ class TechnoparkParserTest extends AbstractParserTest {
         product.getStores().add(new Store());// unable to add store
     }
 
+    @Test
+    void nullifyingStores() throws IOException {
+        Mockito.doReturn(getTestDocument("src/test/repository/technopark/technopark.html"))
+                .when(technoparkParser).get(String.format(URL_FOR_HTML_PAGE, 1));
+        Mockito.doReturn(getObjectMapper().readValue(getTestJsonString("src/test/repository/technopark/technopark1.json"), Response.class))
+                .when(technoparkParser).post(URL_FOR_DATA, String.format(REQUEST, 1), Response.class);
+        Mockito.doReturn(getObjectMapper().readValue(getTestJsonString("src/test/repository/technopark/technopark1.json"), Response.class))
+                .when(technoparkParser).post(URL_FOR_DATA, String.format(REQUEST, 2), Response.class);
+        Product product = technoparkParser.getAllProducts().get(0);
+        product.setStores(null);
+        assertNotNull(product.getStores());
+    }
+
 }
