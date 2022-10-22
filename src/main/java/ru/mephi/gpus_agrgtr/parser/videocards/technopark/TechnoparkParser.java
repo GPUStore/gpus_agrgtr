@@ -11,6 +11,7 @@ import ru.mephi.gpus_agrgtr.parser.Parser;
 import ru.mephi.gpus_agrgtr.parser.videocards.technopark.response.FullDTO;
 import ru.mephi.gpus_agrgtr.parser.videocards.technopark.response.Response;
 import ru.mephi.gpus_agrgtr.parser.videocards.technopark.response.SpecificationsDTO;
+import ru.mephi.gpus_agrgtr.utils.ListUtils;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -131,7 +132,7 @@ public class TechnoparkParser extends Parser {
         return new Product()
                 .setType(Type.VIDEOCARD)
                 .setName(name)
-                .setStores(List.of(store))
+                .setStores(ListUtils.of(store))
                 .setCountry(specificationsDTO.getCountry())
                 .setWeight(specificationsDTO.getNetWeight())
                 .setWeightWithBox(specificationsDTO.getGrossWeight())
