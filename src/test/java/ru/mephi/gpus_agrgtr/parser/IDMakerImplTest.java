@@ -25,7 +25,11 @@ class IDMakerImplTest {
     @Test
     void getCategoryList() {
         Set<Category> categorySet = categoryExtractor.extractCategorySet(name);
-        Set<String> names = categorySet.stream().map(Category::getName).collect(Collectors.toSet());
+
+        Set<String> names = categorySet.stream()
+                .map(Category::getName)
+                .collect(Collectors.toSet());
+
         assertTrue(names.contains("GIGABYTE"));
         assertTrue(names.contains("GEFORCE"));
         assertTrue(names.contains("GTX1660TI"));
@@ -36,16 +40,20 @@ class IDMakerImplTest {
     void equalsTest1(){
         String name1 = "GIGABYTE GEFORCE GTX1660 SUPER 6GB (GV-N166SOC-6GD)";
         String name2 = "GIGABYTE GEFORCE GTX1660 6GB (GV-N1660OC-6GD)";
+
         Set<Category> categorySet1 = categoryExtractor.extractCategorySet(name1);
         Set<Category> categorySet2 = categoryExtractor.extractCategorySet(name2);
+
         assertTrue(categoryExtractor.isEqual(categorySet1,categorySet2));
     }
     @Test
     void equalsTest2(){
         String name1 = "ASUS NVIDIA GEFORCE GTX1660 SUPER 6GB (DUAL-GTX1660S-O6G-EVO)";
         String name2 = "ASUS NVIDIA GEFORCE GTX1660 SUPER 6GB (DUAL-GTX1660S-O6G-EVO)";
+
         Set<Category> categorySet1 = categoryExtractor.extractCategorySet(name1);
         Set<Category> categorySet2 = categoryExtractor.extractCategorySet(name2);
+
         assertTrue(categoryExtractor.isEqual(categorySet1,categorySet2));
     }
 
@@ -53,8 +61,10 @@ class IDMakerImplTest {
     void equalsTest3(){
         String name2 = "GIGABYTE GEFORCE GTX1660 SUPER 6GB (GV-N166SOC-6GD)";
         String name1 = "GIGABYTE GEFORCE GTX1660 6GB (GV-N1660OC-6GD)";
+
         Set<Category> categorySet1 = categoryExtractor.extractCategorySet(name1);
         Set<Category> categorySet2 = categoryExtractor.extractCategorySet(name2);
+
         assertTrue(categoryExtractor.isEqual(categorySet1,categorySet2));
     }
 
@@ -62,11 +72,21 @@ class IDMakerImplTest {
     void equalsTest4(){
         String name2 = "MSI GEFORCE GTX 1660 SUPER VENTUS XS OC RU 6GB";
         String name1 = "GIGABYTE GEFORCE GTX1660 6GB (GV-N1660OC-6GD)";
+
         Set<Category> categorySet1 = categoryExtractor.extractCategorySet(name1);
         Set<Category> categorySet2 = categoryExtractor.extractCategorySet(name2);
+
         assertFalse(categoryExtractor.isEqual(categorySet1,categorySet2));
     }
+
     @Test
-    void getId() {
+    void equalsTest5(){
+        String name2 = "MSI GEFORCE GTX 1660 ";
+        String name1 = "GIGABYTE GEFORCE GTX1660 6GB (GV-N1660OC-6GD)";
+
+        Set<Category> categorySet1 = categoryExtractor.extractCategorySet(name1);
+        Set<Category> categorySet2 = categoryExtractor.extractCategorySet(name2);
+
+        assertFalse(categoryExtractor.isEqual(categorySet1,categorySet2));
     }
 }

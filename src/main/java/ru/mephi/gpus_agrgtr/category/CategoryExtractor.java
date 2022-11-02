@@ -11,12 +11,21 @@ import java.util.stream.Collectors;
 @Component
 public class CategoryExtractor {
 
+    static final int NUMBER_OF_EQUAL_CATEGORIES = 2;
+
     public Set<Category> extractCategorySet(String name) {
+        name = getNameWithoutProductCode(name);
+        String[] categories = name.split(" ");
+        return Arrays.stream(categories)
+                .map(Category::new)
+                .collect(Collectors.toSet());
+    }
+
+    private static String getNameWithoutProductCode(String name) {
         if (name.contains("(")) {
             name = name.substring(0, name.indexOf("(") - 1);
         }
-        String[] categories = name.split(" ");
-        return Arrays.stream(categories).map(Category::new).collect(Collectors.toSet());
+        return name;
     }
 
     public String extractProductCode(String name) {
@@ -28,15 +37,20 @@ public class CategoryExtractor {
     }
 
     public Boolean isEqual(Set<Category> first, Set<Category> second) {
+        int size1 = first.size();
+        int size2 = second.size();
+        int sizeDiff = size1 - size2;
+        if (sizeDiff > NUMBER_OF_EQUAL_CATEGORIES || sizeDiff < -NUMBER_OF_EQUAL_CATEGORIES)
+            return false;
         Set<Category> one = new HashSet<>(first);
         Set<Category> two = new HashSet<>(second);
         one.removeAll(second);
         two.removeAll(first);
         if (one.size() == 0 && two.size() == 0)
             return true;
-        if (one.size() <= 2 && two.size() == 0)
+        if (one.size() <= NUMBER_OF_EQUAL_CATEGORIES && two.size() == 0)
             return true;
-        if (two.size() <= 2 && one.size() == 0)
+        if (two.size() <= NUMBER_OF_EQUAL_CATEGORIES && one.size() == 0)
             return true;
         return false;
     }

@@ -10,18 +10,16 @@ import java.util.List;
 @Getter
 @Table(name = "category")
 public class Category {
-    @Column(name = "name")
-    private String name;
 
     @Id
     @Column(name = "category_id")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int category_id;
 
-    public Category() {
-        products = new ArrayList<>();
-    }
-    @ManyToMany()
+    @Column(name = "name")
+    private String name;
+
+    @ManyToMany
     @JoinTable(
             name = "products_categories",
             inverseJoinColumns = @JoinColumn(
@@ -30,10 +28,10 @@ public class Category {
                     name = "category_id", referencedColumnName = "category_id")
 
     )
-    private final List<Product> products;
+    private List<Product> products;
 
-    public void addProduct(Product product){
-        products.add(product);
+    public Category() {
+        products = new ArrayList<>();
     }
 
     public Category(String name) {
