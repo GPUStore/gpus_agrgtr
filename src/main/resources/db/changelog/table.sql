@@ -70,7 +70,7 @@ CREATE TABLE IF NOT EXISTS public.category
 
 CREATE TABLE IF NOT EXISTS public.products_categories
 (
-    category_id         VARCHAR(255)             NOT NULL,
+    category_id         VARCHAR(32)             NOT NULL,
     product_id          VARCHAR(32)     NOT NULL,
 
     CONSTRAINT category_fk              FOREIGN KEY (category_id)       REFERENCES category   (category_id),
