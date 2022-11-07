@@ -27,7 +27,7 @@ public class ProductService {
         for (Product product : products) {
             Product prod = productRepository.findProductByName(product.getName()).orElse(null);
             if (prod == null) {
-                prod = findProductByCategories(product).orElse(null);
+                prod = findProductByCategories(getCategories(product)).orElse(null);
                 if (prod != null) {
                     log.info("found product by categories:" + product.getName() + "=" + prod.getName());
                 }
@@ -54,8 +54,7 @@ public class ProductService {
         return categoryExtractor.extractCategorySet(product.getName());
     }
 
-    public Optional<Product> findProductByCategories(Product product) {
-        Set<Category> categories = getCategories(product);
+    public Optional<Product> findProductByCategories(Set<Category> categories) {
         List<Product> products = productRepository.findAll();
         return products.stream()
                 .filter(p -> categoryExtractor.isEqual(getCategories(p), categories))

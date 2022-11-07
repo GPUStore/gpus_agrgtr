@@ -9,6 +9,7 @@ CREATE SEQUENCE IF NOT EXISTS store_seq;
 CREATE SEQUENCE IF NOT EXISTS product_seq;
 CREATE SEQUENCE IF NOT EXISTS parameter_seq;
 CREATE SEQUENCE IF NOT EXISTS characteristic_seq;
+CREATE SEQUENCE IF NOT EXISTS category_seq;
 
 CREATE TABLE IF NOT EXISTS public.characteristic
 (
@@ -60,21 +61,18 @@ CREATE TABLE IF NOT EXISTS public.category
 
 
 (
+    category_id         VARCHAR(255)             NOT NULL DEFAULT NEXTVAL('category_seq'),
     name                VARCHAR(255)    NOT NULL,
-    category_id         INT             NOT NULL,
+
 
     CONSTRAINT category_pkey            PRIMARY KEY (category_id)
-);
+    );
 
 CREATE TABLE IF NOT EXISTS public.products_categories
 (
-    category_id         INT             NOT NULL,
+    category_id         VARCHAR(255)             NOT NULL,
     product_id          VARCHAR(32)     NOT NULL,
 
     CONSTRAINT category_fk              FOREIGN KEY (category_id)       REFERENCES category   (category_id),
     CONSTRAINT product_fk               FOREIGN KEY (product_id)        REFERENCES product  (product_id)
 );
-
-ALTER TABLE IF EXISTS public.category
-ALTER COLUMN "category_id"
-    ADD GENERATED ALWAYS AS IDENTITY ( INCREMENT 1 START 0 MINVALUE 0 );

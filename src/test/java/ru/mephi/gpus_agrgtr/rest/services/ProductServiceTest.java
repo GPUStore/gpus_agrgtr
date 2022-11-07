@@ -76,7 +76,7 @@ class ProductServiceTest {
 
         Mockito.when(productRepository.findAll()).thenReturn(List.of(product2));
 
-        Optional<Product> foundProduct = productService.findProductByCategories(product1);
+        Optional<Product> foundProduct = productService.findProductByCategories(productService.getCategories(product1));
 
         assertTrue(foundProduct.isPresent());
         assertEquals(product2, foundProduct.get());

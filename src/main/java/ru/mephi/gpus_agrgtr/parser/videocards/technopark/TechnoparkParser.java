@@ -14,6 +14,7 @@ import ru.mephi.gpus_agrgtr.parser.videocards.entity.SpecificationsDTO;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import static ru.mephi.gpus_agrgtr.utils.StringUtils.getByPattern;
 
@@ -136,6 +137,7 @@ public class TechnoparkParser extends Parser {
                 .setName(storeName)
                 .setUrl(link)
                 .setCost(cost);
+
         return new Product()
                 .setType(Type.VIDEOCARD)
                 .setName(name)
@@ -167,8 +169,7 @@ public class TechnoparkParser extends Parser {
                                     .setCharacteristic(characteristic)
                             );
                 })
-                .toList();
-
+                .collect(Collectors.toCollection(ArrayList::new));
     }
 
     @Override

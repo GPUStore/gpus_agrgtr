@@ -18,7 +18,7 @@ public class CategoryExtractor {
         String[] categories = name.split(" ");
         return Arrays.stream(categories)
                 .map(Category::new)
-                .collect(Collectors.toSet());
+                .collect(Collectors.toCollection(HashSet::new));
     }
 
     private static String getNameWithoutProductCode(String name) {
@@ -37,21 +37,18 @@ public class CategoryExtractor {
     }
 
     public Boolean isEqual(Set<Category> first, Set<Category> second) {
-        int size1 = first.size();
-        int size2 = second.size();
-        int sizeDiff = size1 - size2;
-        if (sizeDiff > NUMBER_OF_EQUAL_CATEGORIES || sizeDiff < -NUMBER_OF_EQUAL_CATEGORIES)
+        Set<Category> largest = first.size() > second.size() ? first : second;
+        Set<Category> smallest = first.size() > second.size() ? second : first;
+        if (largest.size() - smallest.size() > NUMBER_OF_EQUAL_CATEGORIES)
             return false;
-        Set<Category> one = new HashSet<>(first);
-        Set<Category> two = new HashSet<>(second);
-        one.removeAll(second);
-        two.removeAll(first);
-        if (one.size() == 0 && two.size() == 0)
-            return true;
-        if (one.size() <= NUMBER_OF_EQUAL_CATEGORIES && two.size() == 0)
-            return true;
-        if (two.size() <= NUMBER_OF_EQUAL_CATEGORIES && one.size() == 0)
-            return true;
-        return false;
+        int counter = 0;
+        for (Category category : smallest) {
+            if (!largest.contains(category)) {
+                counter++;
+            }
+            if (counter > NUMBER_OF_EQUAL_CATEGORIES)
+                return false;
+        }
+        return true;
     }
 }

@@ -1,6 +1,7 @@
 package ru.mephi.gpus_agrgtr.entity;
 
 import lombok.Getter;
+import org.hibernate.annotations.GenericGenerator;
 
 import javax.persistence.*;
 import java.util.ArrayList;
@@ -13,13 +14,19 @@ public class Category {
 
     @Id
     @Column(name = "category_id")
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int category_id;
+    @GeneratedValue(generator="system_uuid")
+    @GenericGenerator(name="system_uuid", strategy = "uuid")
+    private String category_id;
 
     @Column(name = "name")
     private String name;
 
-    @ManyToMany
+    @ManyToMany(cascade =
+            {
+                    CascadeType.MERGE,
+                    CascadeType.REFRESH,
+                    CascadeType.PERSIST
+            })
     @JoinTable(
             name = "products_categories",
             inverseJoinColumns = @JoinColumn(
