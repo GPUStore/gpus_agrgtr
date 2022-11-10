@@ -8,9 +8,10 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 import ru.mephi.gpus_agrgtr.entity.*;
 import ru.mephi.gpus_agrgtr.parser.Parser;
-import ru.mephi.gpus_agrgtr.parser.videocards.entity.FullDTO;
-import ru.mephi.gpus_agrgtr.parser.videocards.entity.Response;
-import ru.mephi.gpus_agrgtr.parser.videocards.entity.SpecificationsDTO;
+import ru.mephi.gpus_agrgtr.parser.videocards.technopark.response.FullDTO;
+import ru.mephi.gpus_agrgtr.parser.videocards.technopark.response.Response;
+import ru.mephi.gpus_agrgtr.parser.videocards.technopark.response.SpecificationsDTO;
+import ru.mephi.gpus_agrgtr.utils.ListUtils;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -49,7 +50,7 @@ public class TechnoparkParser extends Parser {
                             @Value("${technopark.url.base}") String storeUrl,
                             @Value("${technopark.name}") String storeName,
                             ObjectMapper mapper) {
-        super(url,storeName, mapper);
+        super(url, storeName, mapper);
         this.requestUrl = requestUrl;
         this.storeUrl = storeUrl;
     }
@@ -57,15 +58,6 @@ public class TechnoparkParser extends Parser {
     @Override
     public List<Product> getAllProducts() {
         List<Product> products = new ArrayList<>();
-        try {
-            getAllProducts(products);
-        } catch (Exception e) {
-            log.info("Page parsing failed: " + e.getMessage());
-        }
-        return products;
-    }
-
-    private void getAllProducts(List<Product> products) {
         Document page = getPage(1);
         int countPages = getCountPages(page);
         for (int numberOfPage = 1; numberOfPage <= countPages; numberOfPage++) {
@@ -83,6 +75,7 @@ public class TechnoparkParser extends Parser {
             }
             page = getPage(numberOfPage);
         }
+        return products;
     }
 
     private Document getPage(int numberOfPage) {
@@ -141,7 +134,7 @@ public class TechnoparkParser extends Parser {
         return new Product()
                 .setType(Type.VIDEOCARD)
                 .setName(name)
-                .setStores(List.of(store))
+                .setStores(ListUtils.of(store))
                 .setCountry(specificationsDTO.getCountry())
                 .setWeight(specificationsDTO.getNetWeight())
                 .setWeightWithBox(specificationsDTO.getGrossWeight())

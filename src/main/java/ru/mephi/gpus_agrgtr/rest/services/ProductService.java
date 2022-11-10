@@ -26,6 +26,7 @@ public class ProductService {
     public void save(List<Product> products) {
         for (Product product : products) {
             Product prod = productRepository.findProductByName(product.getName()).orElse(null);
+
             if (prod == null) {
                 prod = findProductByCategories(getCategories(product)).orElse(null);
                 if (prod != null) {
@@ -41,6 +42,7 @@ public class ProductService {
                 product.getStores()
                         .forEach(store -> store.setProduct(product));
                 categoryService.save(categorySet);
+
                 productRepository.save(product);
             }
         }

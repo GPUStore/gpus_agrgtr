@@ -1,6 +1,9 @@
 package ru.mephi.gpus_agrgtr.parser.videocards.test;
 
+import com.fasterxml.jackson.databind.DeserializationFeature;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import org.jsoup.nodes.Document;
+import org.springframework.http.converter.json.Jackson2ObjectMapperBuilder;
 import ru.mephi.gpus_agrgtr.entity.Characteristic;
 import ru.mephi.gpus_agrgtr.entity.Parameter;
 import ru.mephi.gpus_agrgtr.entity.Product;
@@ -15,6 +18,12 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 
 public class AbstractParserTest {
 
+    protected ObjectMapper getObjectMapper() {
+        return Jackson2ObjectMapperBuilder
+                .json()
+                .build()
+                .configure(DeserializationFeature.FAIL_ON_IGNORED_PROPERTIES, false);
+    }
     protected Document getTestDocument(String fileName) throws IOException {
         Document document = new Document(fileName);
         document.append(Files.readString(Path.of(fileName)));
