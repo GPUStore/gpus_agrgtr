@@ -17,5 +17,4 @@ public class ParserConfig {
                 .configure(DeserializationFeature.FAIL_ON_IGNORED_PROPERTIES, false)
                 .configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
     }
-
 }
