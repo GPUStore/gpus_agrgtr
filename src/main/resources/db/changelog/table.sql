@@ -55,8 +55,6 @@ CREATE TABLE IF NOT EXISTS public.store
     CONSTRAINT pp_product_fk            FOREIGN KEY (product_id)        REFERENCES product          (product_id)
 );
 
-
-
 CREATE TABLE IF NOT EXISTS public.category
 
 
