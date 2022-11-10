@@ -43,12 +43,10 @@ public class CategoryExtractor {
             return false;
         int counter = 0;
         for (Category category : smallest) {
-            if (!largest.contains(category)) {
+            if (largest.contains(category)) {
                 counter++;
             }
-            if (counter > NUMBER_OF_EQUAL_CATEGORIES)
-                return false;
         }
-        return true;
+        return (largest.size() - counter) + (smallest.size() - counter) <= NUMBER_OF_EQUAL_CATEGORIES;
     }
 }

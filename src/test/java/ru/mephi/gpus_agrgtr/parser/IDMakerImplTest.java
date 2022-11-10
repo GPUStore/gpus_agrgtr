@@ -89,4 +89,15 @@ class IDMakerImplTest {
 
         assertFalse(categoryExtractor.isEqual(categorySet1,categorySet2));
     }
+
+    @Test
+    void equalsTest6(){
+        String name2 = "a b c d e f ";
+        String name1 = "a b c k";
+
+        Set<Category> categorySet1 = categoryExtractor.extractCategorySet(name1);
+        Set<Category> categorySet2 = categoryExtractor.extractCategorySet(name2);
+
+        assertFalse(categoryExtractor.isEqual(categorySet1,categorySet2));
+    }
 }
