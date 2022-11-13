@@ -26,6 +26,7 @@ technopark:
     list: https://www.technopark.ru/videokarty/?p=%d
     base: https://www.technopark.ru/
     product: https://www.technopark.ru/graphql/
+
 dns:
   name: DNS Store
   url:
