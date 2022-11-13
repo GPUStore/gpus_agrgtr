@@ -58,7 +58,7 @@ CREATE TABLE IF NOT EXISTS public.store
 
 CREATE TABLE IF NOT EXISTS public.category
 (
-    category_id         VARCHAR(255)             NOT NULL DEFAULT NEXTVAL('category_seq'),
+    category_id         VARCHAR(255)    NOT NULL DEFAULT NEXTVAL('category_seq'),
     name                VARCHAR(255)    NOT NULL,
 
     CONSTRAINT category_pkey            PRIMARY KEY (category_id)
