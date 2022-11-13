@@ -1,22 +1,31 @@
-server:
+sserver:
   port: 8080
 
 spring:
   datasource:
-    url: jdbc:postgresql://localhost:5433/gpus_db
+    url: jdbc:postgresql://localhost:5432/gpus_db
     username: postgres
     password: postgres
     driverClassName: org.postgresql.Driver
   jpa:
     show-sql: true
     open-in-view: false
-  properties:
-    hibernate:
-      format_sql: true
 
 logging:
   pattern:
     console: "%d{yyyy-MM-dd HH:mm:ss} - %msg%n"
+  level:
+    root: info
+    org:
+      hibernate:
+      springframework: info
+
+technopark:
+  name: Technopark
+  url:
+    list: https://www.technopark.ru/videokarty/?p=%d
+    base: https://www.technopark.ru/
+    product: https://www.technopark.ru/graphql/
 dns:
   name: DNS Store
   url:
@@ -24,9 +33,3 @@ dns:
     base:  https://www.dns-shop.ru/
     product_micro_data: https://www.dns-shop.ru/product/microdata/8c12d3e8-2d96-11ec-8f06-00155d8ed20b/
     example: https://www.dns-shop.ru/product/8c12d3e82d96ed20/videokarta-powercolor-amd-radeon-r7-240-axr7-240-2gbd5-hlev2/
-technopark:
-  name: Technopark
-  url:
-    list: https://www.technopark.ru/videokarty/?p=%d
-    base: https://www.technopark.ru/
-    product: https://www.technopark.ru/graphql/
