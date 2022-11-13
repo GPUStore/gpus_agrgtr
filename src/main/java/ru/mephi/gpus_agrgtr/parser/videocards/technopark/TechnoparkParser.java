@@ -11,9 +11,11 @@ import ru.mephi.gpus_agrgtr.parser.Parser;
 import ru.mephi.gpus_agrgtr.parser.videocards.technopark.response.FullDTO;
 import ru.mephi.gpus_agrgtr.parser.videocards.technopark.response.Response;
 import ru.mephi.gpus_agrgtr.parser.videocards.technopark.response.SpecificationsDTO;
+import ru.mephi.gpus_agrgtr.utils.ListUtils;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import static ru.mephi.gpus_agrgtr.utils.StringUtils.getByPattern;
 
@@ -128,10 +130,11 @@ public class TechnoparkParser extends Parser {
                 .setName(storeName)
                 .setUrl(link)
                 .setCost(cost);
+
         return new Product()
                 .setType(Type.VIDEOCARD)
                 .setName(name)
-                .setStores(List.of(store))
+                .setStores(ListUtils.of(store))
                 .setCountry(specificationsDTO.getCountry())
                 .setWeight(specificationsDTO.getNetWeight())
                 .setWeightWithBox(specificationsDTO.getGrossWeight())
@@ -159,8 +162,7 @@ public class TechnoparkParser extends Parser {
                                     .setCharacteristic(characteristic)
                             );
                 })
-                .toList();
-
+                .collect(Collectors.toCollection(ArrayList::new));
     }
 
     @Override
