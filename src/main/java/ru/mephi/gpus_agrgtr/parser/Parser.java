@@ -35,6 +35,7 @@ public abstract class Parser {
             return getAllProducts();
         } catch (Exception e) {
             log.info("Page parsing failed: " + url + '\n' + e.getMessage());
+            e.printStackTrace();
             return new ArrayList<>();
         }
     }
