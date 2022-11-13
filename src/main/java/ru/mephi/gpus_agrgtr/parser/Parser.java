@@ -1,6 +1,7 @@
 package ru.mephi.gpus_agrgtr.parser;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.jsoup.Connection;
@@ -16,6 +17,7 @@ import java.util.List;
 
 @Component
 @RequiredArgsConstructor
+@Getter
 @Slf4j
 public abstract class Parser {
     protected String url;
