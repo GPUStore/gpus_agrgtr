@@ -20,7 +20,7 @@ public class Product {
     private String id;
     @Column(name = "name")
     private String name;
-    @OneToMany(mappedBy = "product", fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "product", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     private List<Store> stores;
     @Column(name = "country")
     private String country;
