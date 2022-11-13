@@ -5,6 +5,7 @@ import lombok.Getter;
 import org.hibernate.annotations.GenericGenerator;
 
 import javax.persistence.*;
+import java.util.Date;
 import java.util.Objects;
 
 @Data
@@ -19,6 +20,8 @@ public class Store {
     private String id;
     @Column(name = "name")
     private String name;
+    @Column(name = "date")
+    private Date date;
     @Column(name = "url")
     private String url;
     @Column(name = "cost")
@@ -29,6 +32,11 @@ public class Store {
 
     public Store setId(String id) {
         this.id = id;
+        return this;
+    }
+
+    public Store setDate(Date date) {
+        this.date = date;
         return this;
     }
 

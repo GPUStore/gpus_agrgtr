@@ -13,6 +13,8 @@ import ru.mephi.gpus_agrgtr.parser.videocards.technopark.response.Response;
 import ru.mephi.gpus_agrgtr.parser.videocards.technopark.response.SpecificationsDTO;
 import ru.mephi.gpus_agrgtr.utils.ListUtils;
 
+import java.sql.Date;
+import java.time.Instant;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -129,7 +131,8 @@ public class TechnoparkParser extends Parser {
         Store store = new Store()
                 .setName(storeName)
                 .setUrl(link)
-                .setCost(cost);
+                .setCost(cost)
+                .setDate(Date.from(Instant.now()));
 
         return new Product()
                 .setType(Type.VIDEOCARD)

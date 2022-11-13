@@ -17,7 +17,6 @@ import java.util.Set;
 @Slf4j
 @RequiredArgsConstructor
 public class ProductService {
-
     private final ProductRepository productRepository;
     private final CategoryService categoryService;
     private final CategoryExtractor categoryExtractor;
@@ -26,12 +25,14 @@ public class ProductService {
     public void save(List<Product> products) {
         for (Product product : products) {
             Product prod = productRepository.findProductByName(product.getName()).orElse(null);
-
             if (prod == null) {
                 prod = findProductByCategories(getCategories(product)).orElse(null);
                 if (prod != null) {
                     log.info("found product by categories:" + product.getName() + "=" + prod.getName());
                 }
+            } else {
+                addStores(product, prod);
+                productRepository.save(prod);
             }
             if (prod == null) {
                 Set<Category> categorySet = getCategories(product);
@@ -42,11 +43,16 @@ public class ProductService {
                 product.getStores()
                         .forEach(store -> store.setProduct(product));
                 categoryService.save(categorySet);
-
                 productRepository.save(product);
             }
         }
         System.out.println();
+    }
+
+    private void addStores(Product newProduct, Product oldProduct) {
+        oldProduct.getStores().addAll(newProduct.getStores());
+        oldProduct.getStores()
+                .forEach(store -> store.setProduct(oldProduct));
     }
 
     public Set<Category> getCategories(Product product) {
