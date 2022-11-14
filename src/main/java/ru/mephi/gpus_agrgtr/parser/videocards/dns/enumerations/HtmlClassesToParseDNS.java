@@ -9,6 +9,7 @@ public enum HtmlClassesToParseDNS {
     CHARACTERISTIC_NAME_CLASS("div.product-characteristics__group-title"),
     PATH_FOR_COUNT_PAGES("a.pagination-widget__page-link"),
     PATH_FOR_COSTS("div.product-buy.product-buy_one-line.catalog-product__buy"),
+    SUB_PATH_FOR_COSTS("div.product-buy__price"),
     PATH_FOR_LINKS("a.catalog-product__name.ui-link.ui-link_black"),
     PAGINATION_ELEMENT("li.pagination-widget__page"),
     PAGINATION_ATTRIBUTE("data-page-number");

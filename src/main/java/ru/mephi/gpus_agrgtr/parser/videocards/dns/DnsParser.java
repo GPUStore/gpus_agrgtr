@@ -21,15 +21,12 @@ import ru.mephi.gpus_agrgtr.parser.videocards.dns.response.ParamDTO;
 import ru.mephi.gpus_agrgtr.parser.videocards.dns.response.SpecificationsDTO;
 
 import java.time.Duration;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Objects;
+import java.util.*;
 import java.util.concurrent.atomic.AtomicReference;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import static ru.mephi.gpus_agrgtr.utils.StringUtils.getByPattern;
-
 
 @Slf4j
 @Service
@@ -41,6 +38,7 @@ public class DnsParser extends Parser {
     private static final Integer EXTRA_TIME_AS_SECONDS = 2;
     private static final String NUMBER = "\\d+";
     private static final String NAME = "[^а-яА-Я]";
+    private static final String NAME_BRACKETS = "[\\[\\]]";
 
     public DnsParser(@Value("${dns.url.base}") String url,
                      @Value("${dns.url.list}") String storeUrl,
@@ -53,19 +51,72 @@ public class DnsParser extends Parser {
     }
 
     @Override
-    public Characteristic toCharacteristic(String name) {
-        return switch (name) {
-            case "Общие параметры", "Основные параметры" -> new Characteristic().setName("Основные характеристики");
-            case "Вывод изображения", "Спецификации видеопроцессора", "Спецификации видеопамяти" -> new Characteristic().setName("Технические характеристики");
-            case "Подключение" -> new Characteristic().setName("Разъемы");
-            case "Система охлаждения" -> new Characteristic().setName("Комплектация");
-            case "Габариты и вес" -> new Characteristic().setName("Размер и вес");
-            default -> new Characteristic().setName("Дополнительные характеристики");
-        };
+    public List<Product> getAllProducts() {
+        List<Product> products = new ArrayList<>();
+        try {
+            Document page = getPageWithDefaultWait(storeUrl);
+            int countPages = getCountPages(page);
+
+            for (int numberOfPage = 1; numberOfPage <= countPages; numberOfPage++) {
+                List<Double> costs = getCosts(page);
+                log.info("Got pages :{}", costs.size());
+                List<String> links = getLinks(page);
+                log.info("Got links :{}", links.size());
+                List<String> names = getNames(page);
+                log.info("Got names :{}", names.size());
+                isNotEqualsSizeThrowException(costs, links, names);
+                for (int i = 0; i < links.size(); i++) {
+                    try {
+                        page = getPageWithWaitingSomeElements(links.get(i),
+                                List.of(HtmlClassesToParseDNS.SPECIFICATION_CLASS.getClassName()));
+                        products.add(getProduct(page, costs.get(i), links.get(i), names.get(i)));
+                        log.info("Product with link :{} was handled", links.get(i));
+                    } catch (RuntimeException e) {
+                        log.info("Product with link [" + links.get(i) + "] was not created." + e.getMessage());
+                    }
+                }
+                if(numberOfPage <= countPages){
+                    page = getPageWithDefaultWait(String.format(storeUrl, numberOfPage));
+                }
+            }
+        } finally {
+            webDriver.close();
+            webDriver.quit();
+        }
+        return products;
+    }
+
+    private List<Double> getCosts(Document page) {
+        return page.select(HtmlClassesToParseDNS.PATH_FOR_COSTS.getClassName())
+                .select(HtmlClassesToParseDNS.SUB_PATH_FOR_COSTS.getClassName())
+                .stream()
+                .filter(Objects::nonNull)
+                .map(Element::text)
+                .map(textWithCost -> getByPattern(NUMBER, textWithCost))
+                .map(Double::parseDouble)
+                .toList();
+    }
+
+    private int getCountPages(Document page) {
+        String className = Optional
+                .ofNullable(page.select(HtmlClassesToParseDNS.PAGINATION_ELEMENT.getClassName()).last())
+                .orElseThrow(() -> new RuntimeException("Unable to load pagination element"))
+                .attr(HtmlClassesToParseDNS.PAGINATION_ATTRIBUTE.getClassName());
+        return Integer.parseInt(className);
+    }
+
+    private List<String> getNames(Document page) {
+        return page.select(HtmlClassesToParseDNS.PATH_FOR_LINKS.getClassName()).stream()
+                .filter(Objects::nonNull)
+                .map(Element::text)
+                .map(title -> getByPattern(NAME, title))
+                .map(name -> name.trim().toUpperCase())
+                .map(DnsParser::getReplacedName)
+                .toList();
     }
 
     public static String getReplacedName(String strn) {
-        Pattern pattern = Pattern.compile("[\\[\\]]");
+        Pattern pattern = Pattern.compile(NAME_BRACKETS);
         Matcher matcher = pattern.matcher(strn);
         int count = 0;
         while (matcher.find()) {
@@ -90,45 +141,21 @@ public class DnsParser extends Parser {
         return strn;
     }
 
-    //Todo:add multithreading : = :
-    @Override
-    public List<Product> getAllProducts() {
-        List<Product> products = new ArrayList<>();
-        try {
-            Document page = getPageWithDefaultWait(storeUrl);
-            int countPages = getCountPages(page);
-
-            for (int numberOfPage = 1; numberOfPage <= countPages; numberOfPage++) {
-                if (numberOfPage - 1 > 1) {
-                    page = getPageWithDefaultWait(String.format(storeUrl, numberOfPage - 1));
-                }
-                List<Double> costs = getCosts(page);
-                log.info("Got pages :{}", costs.size());
-                List<String> links = getLinks(page);
-                log.info("Got links :{}", links.size());
-                List<String> names = getNames(page).stream().map(DnsParser::getReplacedName).toList();
-                log.info("Got names :{}", names.size());
-                isNotEqualsSizeThrowException(costs, links, names);
-                for (int i = 0; i < links.size(); i++) {
-                    try {
-                        page = getPageWithWaitingSomeElements(links.get(i),
-                                List.of(HtmlClassesToParseDNS.SPECIFICATION_CLASS.getClassName()));
-                        products.add(getProduct(page, costs.get(i), links.get(i), names.get(i)));
-                        log.info("Product with link :{} was handled", links.get(i));
-                    } catch (RuntimeException e) {
-                        log.info("Product with link [" + links.get(i) + "] was not created.");
-                        log.info(e.getMessage());
-                    }
-                }
-            }
-        } finally {
-            webDriver.close();
-            webDriver.quit();
-        }
-        return products;
+    private List<String> getLinks(Document page) {
+        return page.select(HtmlClassesToParseDNS.PATH_FOR_LINKS.getClassName()).stream()
+                .filter(Objects::nonNull)
+                .map(element -> element.attr("href"))
+                .map(href -> url + href)
+                .toList();
     }
 
-    //TODO:Add a non-constant time item animation via Selenium
+    private void isNotEqualsSizeThrowException(List<Double> costs, List<String> links, List<String> names) {
+        int size = costs.size();
+        if (size != links.size() || size != names.size()) {
+            throw new RuntimeException("Website data integrity error.");
+        }
+    }
+
     private Document getPageWithWaitingSomeElements(String pageUrl, List<String> classElements) {
         webDriver.get(pageUrl);
         checkDownloaded(classElements);
@@ -143,14 +170,14 @@ public class DnsParser extends Parser {
         webDriver.get(pageUrl);
         try {
             Thread.sleep(DEFAULT_WAIT);
-            String stringPage = webDriver.getPageSource();
-            if (stringPage == null) {
-                throw new RuntimeException("The page was not retrieved, probably the wrong url");
-            }
-            return Jsoup.parse(stringPage);
         } catch (InterruptedException e) {
             throw new RuntimeException("Problem with thread ", e);
         }
+        String stringPage = webDriver.getPageSource();
+        if (stringPage == null) {
+            throw new RuntimeException("The page was not retrieved, probably the wrong url");
+        }
+        return Jsoup.parse(stringPage);
     }
 
     public void checkDownloaded(List<String> classElements) {
@@ -195,22 +222,7 @@ public class DnsParser extends Parser {
         return generalFlag;
     }
 
-    private void isNotEqualsSizeThrowException(List<Double> costs, List<String> links, List<String> names) {
-        int size = costs.size();
-        if (size != links.size() || size != names.size()) {
-            throw new RuntimeException("Website data integrity error.");
-        }
-    }
 
-    private int getCountPages(Document page) {
-        Element element = page.select(HtmlClassesToParseDNS.PAGINATION_ELEMENT.getClassName()).last();
-        if (element != null) {
-            return Integer.parseInt(element.attr(HtmlClassesToParseDNS.PAGINATION_ATTRIBUTE
-                    .getClassName()));
-        } else {
-            return 0;
-        }
-    }
 
     private Product getProduct(Document page, Double cost, String link, String name) {
         SpecificationsDTO specificationsDTO = requestData(page);
@@ -223,6 +235,38 @@ public class DnsParser extends Parser {
                 .setName(name)
                 .setStores(List.of(store))
                 .setParameters(toParameters(specificationsDTO.getFull()));
+    }
+
+    private SpecificationsDTO requestData(Document page) {
+        SpecificationsDTO specificationsDTO = new SpecificationsDTO();
+        List<FullDTO> fullDTOList = new ArrayList<>();
+
+        page
+                .select(HtmlClassesToParseDNS.SPECIFICATION_CLASS.getClassName())
+                .select(HtmlClassesToParseDNS.CHARACTERISTIC_GROUP_CLASS.getClassName())
+                .stream()
+                .filter(Objects::nonNull)
+                .forEach(group -> fullDTOList.add(FullDTO.builder()
+                        .name(group.select(HtmlClassesToParseDNS
+                                .CHARACTERISTIC_NAME_CLASS.getClassName()).text())
+                        .list(group.select(HtmlClassesToParseDNS.PARAM_CLASS.getClassName())
+                                .stream()
+                                .map(parameter -> ParamDTO.builder()
+                                .name(Objects.requireNonNull(parameter
+                                        .selectFirst(HtmlClassesToParseDNS
+                                                .PARAM_NAME_CLASS
+                                                .getClassName()))
+                                        .text())
+                                .value(Objects.requireNonNull(parameter
+                                        .selectFirst(HtmlClassesToParseDNS
+                                                .PARAM_VALUE_CLASS
+                                                .getClassName()))
+                                        .text())
+                                .build()).toList())
+                        .build()
+                ));
+        specificationsDTO.setFull(fullDTOList);
+        return specificationsDTO;
     }
 
     private List<Parameter> toParameters(List<FullDTO> fullsDTO) {
@@ -240,62 +284,17 @@ public class DnsParser extends Parser {
 
     }
 
-    private List<Double> getCosts(Document page) {
-
-        return page.select(HtmlClassesToParseDNS.PATH_FOR_COSTS.getClassName()).stream()
-                .filter(Objects::nonNull)
-                .map(Element::childNodes)
-                .filter(node -> !(node instanceof TextNode))
-                .map(nodes -> nodes.stream()
-                        .filter(node -> !(node instanceof TextNode))
-                        .map(Node::childNodes)
-                        .map(nodes1 -> nodes1
-                                .stream()
-                                .filter(node -> !(node instanceof TextNode))
-                                .map(node -> (Element) node)
-                                .map(Element::text)
-                                .findFirst().orElse(null))
-                        .findFirst().orElse(null))
-                .map(textWithCost -> getByPattern(NUMBER, textWithCost))
-                .map(Double::parseDouble)
-                .toList();
-    }
-
-    private SpecificationsDTO requestData(Document page) {
-        SpecificationsDTO specificationsDTO = new SpecificationsDTO();
-        List<FullDTO> fullDTOList = new ArrayList<>();
-
-        page
-                .select(HtmlClassesToParseDNS.SPECIFICATION_CLASS.getClassName())
-                .select(HtmlClassesToParseDNS.CHARACTERISTIC_GROUP_CLASS.getClassName())
-                .stream()
-                .filter(Objects::nonNull)
-                .forEach(group -> fullDTOList.add(FullDTO.builder()
-                        .name(group.select(HtmlClassesToParseDNS.CHARACTERISTIC_NAME_CLASS.getClassName()).text())
-                        .list(group.select(HtmlClassesToParseDNS.PARAM_CLASS.getClassName()).stream().map(parameter -> ParamDTO.builder()
-                                .name(Objects.requireNonNull(parameter.selectFirst(HtmlClassesToParseDNS.PARAM_NAME_CLASS.getClassName())).text())
-                                .value(Objects.requireNonNull(parameter.selectFirst(HtmlClassesToParseDNS.PARAM_VALUE_CLASS.getClassName())).text())
-                                .build()).toList())
-                        .build()
-                ));
-        specificationsDTO.setFull(fullDTOList);
-        return specificationsDTO;
-    }
-
-    private List<String> getNames(Document page) {
-        return page.select(HtmlClassesToParseDNS.PATH_FOR_LINKS.getClassName()).stream()
-                .filter(Objects::nonNull)
-                .map(Element::text)
-                .map(title -> getByPattern(NAME, title))
-                .map(name -> name.trim().toUpperCase())
-                .toList();
-    }
-
-    private List<String> getLinks(Document page) {
-        return page.select(HtmlClassesToParseDNS.PATH_FOR_LINKS.getClassName()).stream()
-                .filter(Objects::nonNull)
-                .map(element -> element.attr("href"))
-                .map(href -> url + href)
-                .toList();
+    @Override
+    public Characteristic toCharacteristic(String name) {
+        return switch (name) {
+            case "Общие параметры", "Основные параметры"
+                    -> new Characteristic().setName("Основные характеристики");
+            case "Вывод изображения", "Спецификации видеопроцессора", "Спецификации видеопамяти"
+                    -> new Characteristic().setName("Технические характеристики");
+            case "Подключение" -> new Characteristic().setName("Разъемы");
+            case "Система охлаждения" -> new Characteristic().setName("Комплектация");
+            case "Габариты и вес" -> new Characteristic().setName("Размер и вес");
+            default -> new Characteristic().setName("Дополнительные характеристики");
+        };
     }
 }

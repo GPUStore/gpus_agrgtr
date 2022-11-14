@@ -1,9 +1,9 @@
-sserver:
+server:
   port: 8080
 
 spring:
   datasource:
-    url: jdbc:postgresql://localhost:5432/gpus_db
+    url: jdbc:postgresql://localhost:5433/gpus_db
     username: postgres
     password: postgres
     driverClassName: org.postgresql.Driver
@@ -32,5 +32,4 @@ dns:
   url:
     list:  https://www.dns-shop.ru/catalog/17a89aab16404e77/videokarty/?p=%d
     base:  https://www.dns-shop.ru/
-    product_micro_data: https://www.dns-shop.ru/product/microdata/8c12d3e8-2d96-11ec-8f06-00155d8ed20b/
-    example: https://www.dns-shop.ru/product/8c12d3e82d96ed20/videokarta-powercolor-amd-radeon-r7-240-axr7-240-2gbd5-hlev2/
+    product: https://www.dns-shop.ru/product/

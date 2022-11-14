@@ -20,6 +20,7 @@ public class ProductService {
 
     @Transactional
     public void save(List<Product> products) {
+
         for (Product product : products) {
             Product prod = productRepository.findProductByName(product.getName()).orElse(null);
             if (null != prod) {
@@ -28,6 +29,7 @@ public class ProductService {
                 product.getParameters().forEach(parameter -> parameter.setProduct(product));
                 product.getStores().forEach(store -> store.setProduct(product));
                 productRepository.save(product);
+                log.info("Product saved: {}" ,product.getName(), product.getStores());
             }
         }
         System.out.println();

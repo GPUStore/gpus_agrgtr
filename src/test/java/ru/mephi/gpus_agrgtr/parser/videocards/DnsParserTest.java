@@ -39,7 +39,6 @@ public class DnsParserTest extends AbstractParserTest {
 
     @BeforeEach
     public void init() {
-        webDriver = Mockito.mock(WebDriver.class);
         DnsParser dnsParser1 = new DnsParser("", "", "store1", null, webDriver);
         dnsParser = Mockito.spy(dnsParser1);
     }
@@ -96,8 +95,10 @@ public class DnsParserTest extends AbstractParserTest {
     }
     @Test
     void getCorrectNameTest() {
-        String name1 =  "KFA2 GEFORCE GTX 1630 [63NQL4HP66EK] [PCI-E, 4  GDDR6, 64 , DVI-D, DISPLAYPORT, HDMI, GPU 1800 ]";
-        String name2 =  "PALIT GEFORCE GT 730 SILENT LP [NEAT7300HD46-2080H] [PCI-E 2.0, 2  GDDR3, 64 , DVI-D, HDMI, VGA (D-SUB), GPU 902 ]";
+        String name1 =  "KFA2 GEFORCE GTX 1630 [63NQL4HP66EK]" +
+                " [PCI-E, 4  GDDR6, 64 , DVI-D, DISPLAYPORT, HDMI, GPU 1800 ]";
+        String name2 =  "PALIT GEFORCE GT 730 SILENT LP [NEAT7300HD46-2080H]" +
+                " [PCI-E 2.0, 2  GDDR3, 64 , DVI-D, HDMI, VGA (D-SUB), GPU 902 ]";
         String name3 = "PALIT GEFORCE GT 730 SILENT LP";
         String name1Expected = "KFA2 GEFORCE GTX 1630 (63NQL4HP66EK)";
         String name2Expected = "PALIT GEFORCE GT 730 SILENT LP (NEAT7300HD46-2080H)";
