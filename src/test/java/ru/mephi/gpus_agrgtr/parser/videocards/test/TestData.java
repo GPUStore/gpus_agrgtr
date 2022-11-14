@@ -1,6 +1,7 @@
 package ru.mephi.gpus_agrgtr.parser.videocards.test;
 
 import ru.mephi.gpus_agrgtr.entity.*;
+import ru.mephi.gpus_agrgtr.utils.ListUtils;
 
 import java.util.List;
 
@@ -9,8 +10,8 @@ public class TestData {
     public static List<Product> getTestProducts() {
         return List.of(
                 createProduct(1)
-                        .setStores(List.of(createStore(1)))
-                        .setParameters(List.of(
+                        .setStores(ListUtils.of(createStore(1)))
+                        .setParameters(ListUtils.of(
                                 createParameter(1)
                                         .setCharacteristic(createCharacteristic(1)),
                                 createParameter(2)
@@ -20,8 +21,8 @@ public class TestData {
                                 createParameter(4)
                                         .setCharacteristic(createCharacteristic(2)))),
                 createProduct(2)
-                        .setStores(List.of(createStore(2)))
-                        .setParameters(List.of(
+                        .setStores(ListUtils.of(createStore(2)))
+                        .setParameters(ListUtils.of(
                                 createParameter(1)
                                         .setCharacteristic(createCharacteristic(1)),
                                 createParameter(2)
