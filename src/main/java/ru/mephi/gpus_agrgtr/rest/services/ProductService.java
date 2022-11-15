@@ -64,6 +64,8 @@ public class ProductService {
     }
 
     private void addStores(Product newProduct, Product oldProduct) {
+        newProduct.getStores()
+                .forEach(store -> store.setProduct(oldProduct));
         oldProduct.getStores().addAll(newProduct.getStores());
     }
 
@@ -78,4 +80,5 @@ public class ProductService {
                 .findFirst();
     }
 }
+
 
