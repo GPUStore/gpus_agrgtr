@@ -3,7 +3,6 @@ package ru.mephi.gpus_agrgtr.entity;
 import lombok.Data;
 import lombok.Getter;
 import org.hibernate.annotations.GenericGenerator;
-
 import javax.persistence.*;
 import java.util.Date;
 import java.util.Objects;
