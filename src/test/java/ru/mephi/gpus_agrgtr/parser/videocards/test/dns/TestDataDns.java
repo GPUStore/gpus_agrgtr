@@ -53,6 +53,4 @@ public class TestDataDns extends TestData {
                 .setWeightWithBox(0.0)
                 ;
     }
-
-
 }
