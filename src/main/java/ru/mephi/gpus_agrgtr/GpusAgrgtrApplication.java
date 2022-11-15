@@ -13,10 +13,9 @@ import java.util.List;
 @RequiredArgsConstructor
 public class GpusAgrgtrApplication implements CommandLineRunner {
     private final List<Parser> parsers;
-
     private final ProductService productService;
 
-    public static void main(String[] args)  {
+    public static void main(String[] args) {
         SpringApplication.run(GpusAgrgtrApplication.class, args);
     }
 

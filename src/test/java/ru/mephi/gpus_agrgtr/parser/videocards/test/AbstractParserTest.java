@@ -24,6 +24,7 @@ public class AbstractParserTest {
                 .build()
                 .configure(DeserializationFeature.FAIL_ON_IGNORED_PROPERTIES, false);
     }
+
     protected Document getTestDocument(String fileName) throws IOException {
         Document document = new Document(fileName);
         document.append(Files.readString(Path.of(fileName)));
@@ -69,5 +70,4 @@ public class AbstractParserTest {
     protected void assertCharacteristics(Characteristic expected, Characteristic actual) {
         assertEquals(expected.getName(), actual.getName());
     }
-
 }
