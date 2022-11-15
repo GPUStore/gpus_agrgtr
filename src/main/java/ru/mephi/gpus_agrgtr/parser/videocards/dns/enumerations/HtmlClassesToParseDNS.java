@@ -13,8 +13,8 @@ public enum HtmlClassesToParseDNS {
     PATH_FOR_LINKS("a.catalog-product__name.ui-link.ui-link_black"),
     PAGINATION_ELEMENT("li.pagination-widget__page"),
     PAGINATION_ATTRIBUTE("data-page-number");
-    private final String className;
 
+    private final String className;
 
     HtmlClassesToParseDNS(String className) {
         this.className = className;

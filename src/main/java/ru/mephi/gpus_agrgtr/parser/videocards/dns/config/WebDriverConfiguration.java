@@ -11,6 +11,7 @@ import org.springframework.context.annotation.Configuration;
 public class WebDriverConfiguration {
     private static final String NAME_DRIVER = "webdriver.edge.driver";
     private static final String PATH_DRIVER = "src/main/java/ru/mephi/gpus_agrgtr/parser/videocards/dns/resources/msedgedriver1.exe";
+
     @Bean
     public WebDriver webDriverBean(){
         System.setProperty(NAME_DRIVER,PATH_DRIVER);

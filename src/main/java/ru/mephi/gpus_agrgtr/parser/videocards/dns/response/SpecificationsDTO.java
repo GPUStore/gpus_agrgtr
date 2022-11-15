@@ -5,6 +5,6 @@ import java.util.List;
 
 @Data
 public class SpecificationsDTO {
-    List<FullDTO> full;
-    Double netWeight;
+    private List<FullDTO> full;
+    private Double netWeight;
 }

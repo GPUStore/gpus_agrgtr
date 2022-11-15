@@ -12,8 +12,8 @@ import java.util.List;
 @SpringBootApplication
 @RequiredArgsConstructor
 public class GpusAgrgtrApplication implements CommandLineRunner {
-
     private final List<Parser> parsers;
+
     private final ProductService productService;
 
     public static void main(String[] args)  {

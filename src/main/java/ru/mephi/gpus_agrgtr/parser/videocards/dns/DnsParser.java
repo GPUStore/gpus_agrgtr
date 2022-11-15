@@ -5,8 +5,6 @@ import lombok.extern.slf4j.Slf4j;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
-import org.jsoup.nodes.Node;
-import org.jsoup.nodes.TextNode;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.support.ui.ExpectedConditions;
@@ -185,7 +183,6 @@ public class DnsParser extends Parser {
         if (!checked) {
             throw new RuntimeException("Unable to load page");
         }
-
     }
 
     private boolean delayControl(List<String> classElements) {
@@ -221,8 +218,6 @@ public class DnsParser extends Parser {
         } while (!generalFlag || count != 3);
         return generalFlag;
     }
-
-
 
     private Product getProduct(Document page, Double cost, String link, String name) {
         SpecificationsDTO specificationsDTO = requestData(page);

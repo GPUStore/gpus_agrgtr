@@ -38,7 +38,7 @@ public class TestDataDns extends TestData {
 
     protected static Store createStore(int number) {
         return new Store()
-                .setName("store1")
+                .setName("store")
                 .setCost(1.0)
                 .setUrl("url" + number)
                 ;

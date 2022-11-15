@@ -29,18 +29,18 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 public class DnsParserTest extends AbstractParserTest {
     private static final String TEST_URL_FOR_INCORRECT_HTML = "src/test/repository/dns/dnsIncorrectList.html";
     private static final String TEST_URL_FOR_CORRECT_HTML = "src/test/repository/dns/dnsCorrectList.html";
-    private static final String TEST_URL_FOR_CORRECT_DATA_1 = "src/test/repository/dns/dnsCorrectVideocard.html";
+    private static final String TEST_URL_FOR_CORRECT_DATA_1 = "src/test/repository/dns/dnsCorrectVideocard1.html";
     private static final String TEST_URL_FOR_CORRECT_DATA_2 = "src/test/repository/dns/dnsCorrectVideocard2.html";
 
     @InjectMocks
-    DnsParser dnsParser;
+    DnsParser dnsParserSpy;
     @Mock
     WebDriver webDriver;
 
     @BeforeEach
     public void init() {
-        DnsParser dnsParser1 = new DnsParser("", "", "store1", null, webDriver);
-        dnsParser = Mockito.spy(dnsParser1);
+        DnsParser dnsParser = new DnsParser("", "", "store", null, webDriver);
+        dnsParserSpy = Mockito.spy(dnsParser);
     }
 
     @Test
@@ -61,13 +61,13 @@ public class DnsParserTest extends AbstractParserTest {
             }
         }).when(webDriver).getPageSource();
         Mockito.doNothing()
-                .when(dnsParser).checkDownloaded(List.of(HtmlClassesToParseDNS.SPECIFICATION_CLASS.getClassName()));
+                .when(dnsParserSpy).checkDownloaded(List.of(HtmlClassesToParseDNS.SPECIFICATION_CLASS.getClassName()));
         Mockito.doReturn(new Characteristic().setName("characteristic1"))
-                .when(dnsParser).toCharacteristic("Основные параметры");
+                .when(dnsParserSpy).toCharacteristic("Основные параметры");
         Mockito.doReturn(new Characteristic().setName("characteristic2"))
-                .when(dnsParser).toCharacteristic("Спецификации видеопамяти");
+                .when(dnsParserSpy).toCharacteristic("Спецификации видеопамяти");
 
-        List<Product> actualProducts = dnsParser.getAllProducts();
+        List<Product> actualProducts = dnsParserSpy.getAllProducts();
 
         assertEquals(expectedProducts.size(), actualProducts.size());
         assertProducts(expectedProducts.get(0), actualProducts.get(0));
@@ -78,7 +78,7 @@ public class DnsParserTest extends AbstractParserTest {
     void getAllProductsTestWithIncorrectUrlHTML() {
         assertThrows(
                 RuntimeException.class,
-                () -> dnsParser.getAllProducts(),
+                () -> dnsParserSpy.getAllProducts(),
                 "The page was not retrieved, probably the wrong url"
         );
     }
@@ -89,7 +89,7 @@ public class DnsParserTest extends AbstractParserTest {
                 .when(webDriver).getPageSource();
         assertThrows(
                 RuntimeException.class,
-                () -> dnsParser.getAllProducts(),
+                () -> dnsParserSpy.getAllProducts(),
                 "Website data integrity error."
         );
     }
@@ -116,22 +116,22 @@ public class DnsParserTest extends AbstractParserTest {
     @Test
     void toCharacteristicTest() {
         assertEquals(new Characteristic().setName("Основные характеристики"),
-                dnsParser.toCharacteristic("Общие параметры" ));
+                dnsParserSpy.toCharacteristic("Общие параметры" ));
         assertEquals(new Characteristic().setName("Основные характеристики"),
-                dnsParser.toCharacteristic("Основные параметры"));
+                dnsParserSpy.toCharacteristic("Основные параметры"));
         assertEquals(new Characteristic().setName("Технические характеристики"),
-                dnsParser.toCharacteristic("Вывод изображения" ));
+                dnsParserSpy.toCharacteristic("Вывод изображения" ));
         assertEquals(new Characteristic().setName("Технические характеристики"),
-                dnsParser.toCharacteristic("Спецификации видеопроцессора" ));
+                dnsParserSpy.toCharacteristic("Спецификации видеопроцессора" ));
         assertEquals(new Characteristic().setName( "Технические характеристики"),
-                dnsParser.toCharacteristic("Спецификации видеопамяти"));
+                dnsParserSpy.toCharacteristic("Спецификации видеопамяти"));
         assertEquals(new Characteristic().setName( "Разъемы"),
-                dnsParser.toCharacteristic("Подключение"));
+                dnsParserSpy.toCharacteristic("Подключение"));
         assertEquals(new Characteristic().setName( "Комплектация"),
-                dnsParser.toCharacteristic("Система охлаждения"));
+                dnsParserSpy.toCharacteristic("Система охлаждения"));
         assertEquals(new Characteristic().setName("Размер и вес"),
-                dnsParser.toCharacteristic("Габариты и вес" ));
+                dnsParserSpy.toCharacteristic("Габариты и вес" ));
         assertEquals(new Characteristic().setName("Дополнительные характеристики"),
-                dnsParser.toCharacteristic("some characteristic"));
+                dnsParserSpy.toCharacteristic("some characteristic"));
     }
 }

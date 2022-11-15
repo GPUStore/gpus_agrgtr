@@ -3,7 +3,7 @@ server:
 
 spring:
   datasource:
-    url: jdbc:postgresql://localhost:5433/gpus_db
+    url: jdbc:postgresql://localhost:5432/gpus_db
     username: postgres
     password: postgres
     driverClassName: org.postgresql.Driver
