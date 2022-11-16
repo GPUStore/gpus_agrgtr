@@ -13,7 +13,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import ru.mephi.gpus_agrgtr.entity.*;
 import ru.mephi.gpus_agrgtr.parser.Parser;
-import ru.mephi.gpus_agrgtr.parser.videocards.dns.enumerations.HtmlClassesToParseDNS;
+import ru.mephi.gpus_agrgtr.parser.videocards.dns.enumerations.HtmlClasses;
 import ru.mephi.gpus_agrgtr.parser.videocards.dns.response.FullDTO;
 import ru.mephi.gpus_agrgtr.parser.videocards.dns.response.ParamDTO;
 import ru.mephi.gpus_agrgtr.parser.videocards.dns.response.SpecificationsDTO;
@@ -66,7 +66,7 @@ public class DnsParser extends Parser {
                 for (int i = 0; i < links.size(); i++) {
                     try {
                         page = getPageWithWaitingSomeElements(links.get(i),
-                                List.of(HtmlClassesToParseDNS.SPECIFICATION_CLASS.getClassName()));
+                                List.of(HtmlClasses.SPECIFICATION_CLASS.getClassName()));
                         products.add(getProduct(page, costs.get(i), links.get(i), names.get(i)));
                         log.info("Product with link :{} was handled", links.get(i));
                     } catch (RuntimeException e) {
@@ -84,9 +84,31 @@ public class DnsParser extends Parser {
         return products;
     }
 
+    private Document getPageWithDefaultWait(String pageUrl) {
+        webDriver.get(pageUrl);
+        try {
+            Thread.sleep(DEFAULT_WAIT);
+        } catch (InterruptedException e) {
+            throw new RuntimeException("Problem with thread ", e);
+        }
+        String stringPage = webDriver.getPageSource();
+        if (stringPage == null) {
+            throw new RuntimeException("The page was not retrieved, probably the wrong url");
+        }
+        return Jsoup.parse(stringPage);
+    }
+
+    private int getCountPages(Document page) {
+        String className = Optional
+                .ofNullable(page.select(HtmlClasses.PAGINATION_ELEMENT.getClassName()).last())
+                .orElseThrow(() -> new RuntimeException("Unable to load pagination element"))
+                .attr(HtmlClasses.PAGINATION_ATTRIBUTE.getClassName());
+        return Integer.parseInt(className);
+    }
+
     private List<Double> getCosts(Document page) {
-        return page.select(HtmlClassesToParseDNS.PATH_FOR_COSTS.getClassName())
-                .select(HtmlClassesToParseDNS.SUB_PATH_FOR_COSTS.getClassName())
+        return page.select(HtmlClasses.COST_CLASS.getClassName())
+                .select(HtmlClasses.SUB_FOR_COSTS_CLASS.getClassName())
                 .stream()
                 .filter(Objects::nonNull)
                 .map(Element::text)
@@ -95,16 +117,8 @@ public class DnsParser extends Parser {
                 .toList();
     }
 
-    private int getCountPages(Document page) {
-        String className = Optional
-                .ofNullable(page.select(HtmlClassesToParseDNS.PAGINATION_ELEMENT.getClassName()).last())
-                .orElseThrow(() -> new RuntimeException("Unable to load pagination element"))
-                .attr(HtmlClassesToParseDNS.PAGINATION_ATTRIBUTE.getClassName());
-        return Integer.parseInt(className);
-    }
-
     private List<String> getNames(Document page) {
-        return page.select(HtmlClassesToParseDNS.PATH_FOR_LINKS.getClassName()).stream()
+        return page.select(HtmlClasses.LINK_CLASS.getClassName()).stream()
                 .filter(Objects::nonNull)
                 .map(Element::text)
                 .map(title -> getByPattern(NAME, title))
@@ -140,7 +154,7 @@ public class DnsParser extends Parser {
     }
 
     private List<String> getLinks(Document page) {
-        return page.select(HtmlClassesToParseDNS.PATH_FOR_LINKS.getClassName()).stream()
+        return page.select(HtmlClasses.LINK_CLASS.getClassName()).stream()
                 .filter(Objects::nonNull)
                 .map(element -> element.attr("href"))
                 .map(href -> url + href)
@@ -157,20 +171,6 @@ public class DnsParser extends Parser {
     private Document getPageWithWaitingSomeElements(String pageUrl, List<String> classElements) {
         webDriver.get(pageUrl);
         checkDownloaded(classElements);
-        String stringPage = webDriver.getPageSource();
-        if (stringPage == null) {
-            throw new RuntimeException("The page was not retrieved, probably the wrong url");
-        }
-        return Jsoup.parse(stringPage);
-    }
-
-    private Document getPageWithDefaultWait(String pageUrl) {
-        webDriver.get(pageUrl);
-        try {
-            Thread.sleep(DEFAULT_WAIT);
-        } catch (InterruptedException e) {
-            throw new RuntimeException("Problem with thread ", e);
-        }
         String stringPage = webDriver.getPageSource();
         if (stringPage == null) {
             throw new RuntimeException("The page was not retrieved, probably the wrong url");
@@ -235,33 +235,36 @@ public class DnsParser extends Parser {
     private SpecificationsDTO requestData(Document page) {
         SpecificationsDTO specificationsDTO = new SpecificationsDTO();
         List<FullDTO> fullDTOList = new ArrayList<>();
-
         page
-                .select(HtmlClassesToParseDNS.SPECIFICATION_CLASS.getClassName())
-                .select(HtmlClassesToParseDNS.CHARACTERISTIC_GROUP_CLASS.getClassName())
+                .select(HtmlClasses.SPECIFICATION_CLASS.getClassName())
+                .select(HtmlClasses.CHARACTERISTIC_GROUP_CLASS.getClassName())
                 .stream()
                 .filter(Objects::nonNull)
-                .forEach(group -> fullDTOList.add(FullDTO.builder()
-                        .name(group.select(HtmlClassesToParseDNS
-                                .CHARACTERISTIC_NAME_CLASS.getClassName()).text())
-                        .list(group.select(HtmlClassesToParseDNS.PARAM_CLASS.getClassName())
-                                .stream()
-                                .map(parameter -> ParamDTO.builder()
-                                .name(Objects.requireNonNull(parameter
-                                        .selectFirst(HtmlClassesToParseDNS
-                                                .PARAM_NAME_CLASS
-                                                .getClassName()))
-                                        .text())
-                                .value(Objects.requireNonNull(parameter
-                                        .selectFirst(HtmlClassesToParseDNS
-                                                .PARAM_VALUE_CLASS
-                                                .getClassName()))
-                                        .text())
-                                .build()).toList())
-                        .build()
-                ));
+                .forEach(group -> fullDTOList.add(getFullDTOOfElement(group)));
+
         specificationsDTO.setFull(fullDTOList);
         return specificationsDTO;
+    }
+
+    private FullDTO getFullDTOOfElement(Element groupElement){
+        return FullDTO.builder()
+                .name(groupElement.select(HtmlClasses
+                        .CHARACTERISTIC_NAME_CLASS.getClassName()).text())
+                .list(groupElement.select(HtmlClasses.PARAM_CLASS.getClassName())
+                        .stream()
+                        .map(parameter -> ParamDTO.builder()
+                                .name(Objects.requireNonNull(parameter
+                                                .selectFirst(HtmlClasses
+                                                        .PARAM_NAME_CLASS
+                                                        .getClassName()))
+                                        .text())
+                                .value(Objects.requireNonNull(parameter
+                                                .selectFirst(HtmlClasses
+                                                        .PARAM_VALUE_CLASS
+                                                        .getClassName()))
+                                        .text())
+                                .build()).toList())
+                .build();
     }
 
     private List<Parameter> toParameters(List<FullDTO> fullsDTO) {

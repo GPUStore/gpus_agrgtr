@@ -14,7 +14,7 @@ import org.openqa.selenium.WebDriver;
 import ru.mephi.gpus_agrgtr.entity.Characteristic;
 import ru.mephi.gpus_agrgtr.entity.Product;
 import ru.mephi.gpus_agrgtr.parser.videocards.dns.DnsParser;
-import ru.mephi.gpus_agrgtr.parser.videocards.dns.enumerations.HtmlClassesToParseDNS;
+import ru.mephi.gpus_agrgtr.parser.videocards.dns.enumerations.HtmlClasses;
 import ru.mephi.gpus_agrgtr.parser.videocards.test.AbstractParserTest;
 import ru.mephi.gpus_agrgtr.parser.videocards.test.dns.TestDataDns;
 
@@ -61,7 +61,7 @@ public class DnsParserTest extends AbstractParserTest {
             }
         }).when(webDriver).getPageSource();
         Mockito.doNothing()
-                .when(dnsParserSpy).checkDownloaded(List.of(HtmlClassesToParseDNS.SPECIFICATION_CLASS.getClassName()));
+                .when(dnsParserSpy).checkDownloaded(List.of(HtmlClasses.SPECIFICATION_CLASS.getClassName()));
         Mockito.doReturn(new Characteristic().setName("characteristic1"))
                 .when(dnsParserSpy).toCharacteristic("Основные параметры");
         Mockito.doReturn(new Characteristic().setName("characteristic2"))
