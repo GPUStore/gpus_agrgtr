@@ -96,10 +96,65 @@ class ProductServiceTest {
                 .setWeight(100)
                 .setWeightWithBox(80);
         newParameter.setProduct(newProduct);
-        ArgumentCaptor<Product> productArgumentCaptor = ArgumentCaptor.forClass(Product.class);
+
         Mockito.when(productRepository.findProductByName(Mockito.anyString())).thenReturn(Optional.of(existingProduct));
+        ArgumentCaptor<Product> productArgumentCaptor = ArgumentCaptor.forClass(Product.class);
 
         productService.save(newProduct);
+
+        Mockito.verify(productRepository).save(productArgumentCaptor.capture());
+        Product savedProduct = productArgumentCaptor.getValue();
+        assertEquals(savedProduct.getName(), "existing Product");
+        savedProduct.getStores().forEach(s -> {
+            assertEquals(s.getProduct(), existingProduct);
+            assertNotNull(s.getDate());
+        });
+        assertEquals(savedProduct.getStores().size(), 2);
+        savedProduct.getParameters().forEach(s -> assertEquals(s.getProduct(), existingProduct));
+    }
+    @Test
+    void saveProductByCategories(){
+        Store oldStore = new Store()
+                .setName("Super Store")
+                .setUrl("www.store.de")
+                .setCost(100.0)
+                .setDate(Date.from(Instant.now()));
+        Store newStore = new Store()
+                .setName("Super Store")
+                .setUrl("www.store.de")
+                .setCost(90.0);
+        Parameter existingParameter = new Parameter();
+        Parameter newParameter = new Parameter();
+        Product existingProduct = new Product()
+                .setType(Type.VIDEOCARD)
+                .setName("existing Product")
+                .setStores(ListUtils.of(oldStore))
+                .setParameters(ListUtils.of(existingParameter))
+                .setCountry("aaa")
+                .setWeight(100)
+                .setWeightWithBox(80);
+        oldStore.setProduct(existingProduct);
+        existingParameter.setProduct(existingProduct);
+        Product newProduct = new Product()
+                .setType(Type.VIDEOCARD)
+                .setName("new existing Product")
+                .setStores(ListUtils.of(newStore))
+                .setParameters(ListUtils.of(newParameter))
+                .setCountry("aaa")
+                .setWeight(100)
+                .setWeightWithBox(80);
+        newParameter.setProduct(newProduct);
+
+
+        List<Product> productList = new ArrayList<>();
+        productList.add(existingProduct);
+
+        ArgumentCaptor<Product> productArgumentCaptor = ArgumentCaptor.forClass(Product.class);
+        Mockito.when(productRepository.findAll()).thenReturn(productList);
+        Mockito.when(productRepository.findProductByName(Mockito.anyString())).thenReturn(Optional.empty());
+
+        productService.save(newProduct);
+
 
         Mockito.verify(productRepository).save(productArgumentCaptor.capture());
         Product savedProduct = productArgumentCaptor.getValue();
