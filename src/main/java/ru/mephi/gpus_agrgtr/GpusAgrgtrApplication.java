@@ -23,7 +23,7 @@ public class GpusAgrgtrApplication implements CommandLineRunner {
     @Override
     public void run(String... args) {
         for (Parser parser : parsers) {
-            productService.save(parser.parse());
+            parser.parse().forEach(productService::save);
         }
         System.out.println("THE END!");
     }

@@ -23,21 +23,19 @@ public class ProductService {
     private final CategoryExtractor categoryExtractor;
 
     @Transactional
-    public void save(List<Product> products) {
-        for (Product product : products) {
-            populate(product);
-            Optional<Product> prod = find(product.getName());
-            if (prod.isPresent()) {
-                addStores(product, prod.get());
-                productRepository.save(prod.get());
-            } else {
-                productRepository.save(product);
-            }
+    public void save(Product product) {
+        populate(product);
+        Optional<Product> prod = find(product.getName());
+        if (prod.isPresent()) {
+            addStores(product, prod.get());
+            productRepository.save(prod.get());
+        } else {
+            productRepository.save(product);
         }
         System.out.println();
     }
 
-    public void populate(Product product) {
+    private void populate(Product product) {
         Set<Category> categorySet = getCategories(product);
         categorySet.forEach(category -> category.getProducts().add(product));
         product.setCategories(categorySet)
@@ -50,7 +48,7 @@ public class ProductService {
                 });
     }
 
-    public Optional<Product> find(String productName) {
+    private Optional<Product> find(String productName) {
         Optional<Product> prod = productRepository.findProductByName(productName);
         if (prod.isPresent()) {
             return prod;

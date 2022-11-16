@@ -1,15 +1,13 @@
 package ru.mephi.gpus_agrgtr.entity;
 
-import lombok.Data;
-import lombok.EqualsAndHashCode;
+import lombok.Getter;
 import lombok.Setter;
 import org.hibernate.annotations.GenericGenerator;
 
 import javax.persistence.*;
 
-@Data
-@EqualsAndHashCode
 @Setter
+@Getter
 @Entity
 @Table(name = "parameter")
 public class Parameter {
