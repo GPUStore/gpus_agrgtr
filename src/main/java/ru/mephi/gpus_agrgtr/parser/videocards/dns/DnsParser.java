@@ -17,12 +17,17 @@ import ru.mephi.gpus_agrgtr.parser.videocards.dns.enumerations.HtmlClasses;
 import ru.mephi.gpus_agrgtr.parser.videocards.dns.response.FullDTO;
 import ru.mephi.gpus_agrgtr.parser.videocards.dns.response.ParamDTO;
 import ru.mephi.gpus_agrgtr.parser.videocards.dns.response.SpecificationsDTO;
+import ru.mephi.gpus_agrgtr.utils.ListUtils;
 
 import java.time.Duration;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Objects;
+import java.util.Optional;
 import java.util.concurrent.atomic.AtomicReference;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+import java.util.stream.Collectors;
 
 import static ru.mephi.gpus_agrgtr.utils.StringUtils.getByPattern;
 
@@ -51,38 +56,35 @@ public class DnsParser extends Parser {
     @Override
     public List<Product> getAllProducts() {
         List<Product> products = new ArrayList<>();
-        try {
-            Document page = getPageWithDefaultWait(storeUrl);
-            int countPages = getCountPages(page);
 
-            for (int numberOfPage = 1; numberOfPage <= countPages; numberOfPage++) {
-                List<Double> costs = getCosts(page);
-                log.info("Got pages :{}", costs.size());
-                List<String> links = getLinks(page);
-                log.info("Got links :{}", links.size());
-                List<String> names = getNames(page);
-                log.info("Got names :{}", names.size());
-                isNotEqualsSizeThrowException(costs, links, names);
-                for (int i = 0; i < links.size(); i++) {
-                    try {
-                        page = getPageWithWaitingSomeElements(links.get(i),
-                                List.of(HtmlClasses.SPECIFICATION_CLASS.getClassName()));
-                        products.add(getProduct(page, costs.get(i), links.get(i), names.get(i)));
-                        log.info("Product with link :{} was handled", links.get(i));
-                    } catch (RuntimeException e) {
-                        log.info("Product with link [" + links.get(i) + "] was not created." + e.getMessage());
-                    }
-                }
-                if(numberOfPage <= countPages){
-                    page = getPageWithDefaultWait(String.format(storeUrl, numberOfPage));
+        Document page = getPageWithDefaultWait(storeUrl);
+        int countPages = getCountPages(page);
+
+        for (int numberOfPage = 1; numberOfPage <= countPages; numberOfPage++) {
+            List<Double> costs = getCosts(page);
+            log.info("Got pages :{}", costs.size());
+            List<String> links = getLinks(page);
+            log.info("Got links :{}", links.size());
+            List<String> names = getNames(page);
+            log.info("Got names :{}", names.size());
+            isNotEqualsSizeThrowException(costs, links, names);
+            for (int i = 0; i < links.size(); i++) {
+                try {
+                    page = getPageWithWaitingSomeElements(links.get(i),
+                            List.of(HtmlClasses.SPECIFICATION_CLASS.getClassName()));
+                    products.add(getProduct(page, costs.get(i), links.get(i), names.get(i)));
+                    log.info("Product with link :{} was handled", links.get(i));
+                } catch (RuntimeException e) {
+                    log.info("Product with link [" + links.get(i) + "] was not created." + e.getMessage());
                 }
             }
-        } finally {
-            webDriver.close();
-            webDriver.quit();
+            if (numberOfPage <= countPages) {
+                page = getPageWithDefaultWait(String.format(storeUrl, numberOfPage));
+            }
         }
         return products;
     }
+
 
     private Document getPageWithDefaultWait(String pageUrl) {
         webDriver.get(pageUrl);
@@ -228,7 +230,7 @@ public class DnsParser extends Parser {
         return new Product()
                 .setType(Type.VIDEOCARD)
                 .setName(name)
-                .setStores(List.of(store))
+                .setStores(ListUtils.of(store))
                 .setParameters(toParameters(specificationsDTO.getFull()));
     }
 
@@ -246,24 +248,27 @@ public class DnsParser extends Parser {
         return specificationsDTO;
     }
 
-    private FullDTO getFullDTOOfElement(Element groupElement){
+    private FullDTO getFullDTOOfElement(Element groupElement) {
         return FullDTO.builder()
                 .name(groupElement.select(HtmlClasses
                         .CHARACTERISTIC_NAME_CLASS.getClassName()).text())
-                .list(groupElement.select(HtmlClasses.PARAM_CLASS.getClassName())
+                .list( groupElement.select(HtmlClasses.PARAM_CLASS.getClassName())
                         .stream()
-                        .map(parameter -> ParamDTO.builder()
-                                .name(Objects.requireNonNull(parameter
-                                                .selectFirst(HtmlClasses
-                                                        .PARAM_NAME_CLASS
-                                                        .getClassName()))
-                                        .text())
-                                .value(Objects.requireNonNull(parameter
-                                                .selectFirst(HtmlClasses
-                                                        .PARAM_VALUE_CLASS
-                                                        .getClassName()))
-                                        .text())
-                                .build()).toList())
+                        .map(
+                                parameter -> ParamDTO.builder()
+                                        .name(Objects.requireNonNull(parameter
+                                                        .selectFirst(HtmlClasses
+                                                                .PARAM_NAME_CLASS
+                                                                .getClassName()))
+                                                .text())
+                                        .value(Objects.requireNonNull(parameter
+                                                        .selectFirst(HtmlClasses
+                                                                .PARAM_VALUE_CLASS
+                                                                .getClassName()))
+                                                .text())
+                                        .build()
+                        )
+                        .collect(Collectors.toList()))
                 .build();
     }
 
@@ -278,17 +283,14 @@ public class DnsParser extends Parser {
                                     .setCharacteristic(characteristic)
                             );
                 })
-                .toList();
-
+                .collect(Collectors.toList());
     }
 
     @Override
     public Characteristic toCharacteristic(String name) {
         return switch (name) {
-            case "Общие параметры", "Основные параметры"
-                    -> new Characteristic().setName("Основные характеристики");
-            case "Вывод изображения", "Спецификации видеопроцессора", "Спецификации видеопамяти"
-                    -> new Characteristic().setName("Технические характеристики");
+            case "Общие параметры", "Основные параметры" -> new Characteristic().setName("Основные характеристики");
+            case "Вывод изображения", "Спецификации видеопроцессора", "Спецификации видеопамяти" -> new Characteristic().setName("Технические характеристики");
             case "Подключение" -> new Characteristic().setName("Разъемы");
             case "Система охлаждения" -> new Characteristic().setName("Комплектация");
             case "Габариты и вес" -> new Characteristic().setName("Размер и вес");
