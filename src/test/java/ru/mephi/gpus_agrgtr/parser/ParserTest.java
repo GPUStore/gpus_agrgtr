@@ -1,10 +1,8 @@
 package ru.mephi.gpus_agrgtr.parser;
 
-import org.jsoup.helper.ValidationException;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
-import org.mockito.Spy;
 import ru.mephi.gpus_agrgtr.entity.Characteristic;
 import ru.mephi.gpus_agrgtr.entity.Product;
 import ru.mephi.gpus_agrgtr.parser.videocards.test.AbstractParserTest;
