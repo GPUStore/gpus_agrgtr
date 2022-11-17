@@ -25,14 +25,13 @@ public class ProductService {
     @Transactional
     public void save(Product product) {
         populate(product);
-        Optional<Product> prod = find(product.getName());
-        if (prod.isPresent()) {
-            addStores(product, prod.get());
-            productRepository.save(prod.get());
+        Optional<Product> foundProduct = find(product.getName());
+        if (foundProduct.isPresent()) {
+            addStores(product, foundProduct.get());
+            productRepository.save(foundProduct.get());
         } else {
             productRepository.save(product);
         }
-        System.out.println();
     }
 
     private void populate(Product product) {
