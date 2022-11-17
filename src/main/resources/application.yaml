@@ -11,14 +11,19 @@ spring:
     show-sql: true
     open-in-view: false
 
+agrgtr:
+  cron: 0 0 0 * * * #каждый день в полночь
+
 logging:
+  file:
+    name: src/main/resources/application-debug.log
   pattern:
     console: "%d{yyyy-MM-dd HH:mm:ss} - %msg%n"
+    file: "%d{yyyy-MM-dd HH:mm:ss} [%thread] %-5level %logger{36} - %msg%n"
   level:
-    root: info
     org:
-      hibernate:
-      springframework: info
+      springframework:
+        web: TRACE
 
 technopark:
   name: Technopark
