@@ -252,7 +252,7 @@ public class DnsParser extends Parser {
         return FullDTO.builder()
                 .name(groupElement.select(HtmlClasses
                         .CHARACTERISTIC_NAME.getName()).text())
-                .list( groupElement.select(HtmlClasses.SPECIFICATION_PARAM.getName())
+                .list(groupElement.select(HtmlClasses.SPECIFICATION_PARAM.getName())
                         .stream()
                         .map(this::getParamDTO)
                         .collect(Collectors.toList()))
