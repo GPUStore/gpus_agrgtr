@@ -14,6 +14,7 @@ import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 import java.util.Set;
+import java.util.function.Supplier;
 
 @Service
 @Slf4j
@@ -48,16 +49,9 @@ public class ProductService {
     }
 
     private Optional<Product> find(String productName) {
-        Optional<Product> prod = productRepository.findProductByName(productName);
-        if (prod.isPresent()) {
-            return prod;
-        }
-        prod = findProductByCategories(categoryExtractor.extractCategorySet(productName));
-        if (prod.isPresent()) {
-            log.info("found product by categories:" + productName + "=" + prod.get().getName() + "\n");
-            return prod;
-        }
-        return Optional.empty();
+        return productRepository
+                .findProductByName(productName)
+                .or(findProductByCategories(categoryExtractor.extractCategorySet(productName)));
     }
 
     private void addStores(Product newProduct, Product oldProduct) {
@@ -70,11 +64,12 @@ public class ProductService {
         return categoryExtractor.extractCategorySet(product.getName());
     }
 
-    public Optional<Product> findProductByCategories(Set<Category> categories) {
+    public Supplier<? extends Optional<? extends Product>> findProductByCategories(Set<Category> categories) {
         List<Product> products = productRepository.findAll();
-        return products.stream()
-                .filter(p -> categoryExtractor.isEqual(getCategories(p), categories))
-                .findFirst();
+        return () ->
+                products.stream()
+                        .filter(p -> categoryExtractor.isEqual(getCategories(p), categories))
+                        .findFirst();
     }
 }
 
