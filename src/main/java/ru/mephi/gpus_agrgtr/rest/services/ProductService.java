@@ -7,14 +7,13 @@ import org.springframework.transaction.annotation.Transactional;
 import ru.mephi.gpus_agrgtr.category.CategoryExtractor;
 import ru.mephi.gpus_agrgtr.entity.Category;
 import ru.mephi.gpus_agrgtr.entity.Product;
+import ru.mephi.gpus_agrgtr.entity.Store;
 import ru.mephi.gpus_agrgtr.rest.repositories.ProductRepository;
 
 import java.time.Instant;
-import java.util.Date;
-import java.util.List;
-import java.util.Optional;
-import java.util.Set;
+import java.util.*;
 import java.util.function.Supplier;
+import java.util.stream.Collectors;
 
 @Service
 @Slf4j
@@ -55,9 +54,28 @@ public class ProductService {
     }
 
     private void addStores(Product newProduct, Product oldProduct) {
+        Map<String, Double> eachStoreLastPriceGroupedByName = oldProduct
+                .getStores()
+                .stream()
+                .collect(Collectors.groupingBy(Store::getName))
+                .entrySet()
+                .stream().collect(Collectors.toMap(
+                        Map.Entry::getKey,
+                        e -> e.getValue()
+                                .stream()
+                                .reduce((s1, s2) -> s1.getDate().compareTo(s2.getDate()) > 0 ? s1 : s2)
+                                .orElseThrow(() -> new IllegalArgumentException("No date in store!"))
+                                .getCost()
+                ));
         newProduct.getStores()
-                .forEach(store -> store.setProduct(oldProduct));
-        oldProduct.getStores().addAll(newProduct.getStores());
+                .forEach(store -> {
+                    double newStorePrice = store.getCost();
+                    Double oldStoreLastPrice = eachStoreLastPriceGroupedByName.get(store.getName());
+                    if (oldStoreLastPrice != null && !oldStoreLastPrice.equals(newStorePrice)) {
+                        store.setProduct(oldProduct);
+                        oldProduct.getStores().add(store);
+                    }
+                });
     }
 
     public Set<Category> getCategories(Product product) {

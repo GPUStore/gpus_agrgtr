@@ -28,6 +28,8 @@ class ProductServiceTest {
     private static Product product;
     private static Product existingProduct;
     private static Product newProduct;
+    private static Product newProduct1;
+    private static Product newProduct2;
 
     @BeforeEach
     void setUp() {
@@ -70,17 +72,16 @@ class ProductServiceTest {
             assertEquals(s.getProduct(), existingProduct);
             assertNotNull(s.getDate());
         });
-        assertEquals(savedProduct.getStores().size(), 2);
+        assertEquals(savedProduct.getStores().size(), 3);
         savedProduct.getParameters().forEach(s -> assertEquals(s.getProduct(), existingProduct));
     }
 
     @Test
-    void saveProductByCategories() {
+    void saveExistingProductSamePrice() {
+        Mockito.when(productRepository.findProductByName(Mockito.anyString())).thenReturn(Optional.of(existingProduct));
         ArgumentCaptor<Product> productArgumentCaptor = ArgumentCaptor.forClass(Product.class);
-        Mockito.when(productRepository.findAll()).thenReturn(productList);
-        Mockito.when(productRepository.findProductByName(Mockito.anyString())).thenReturn(Optional.empty());
 
-        productService.save(newProduct);
+        productService.save(newProduct2);
 
         Mockito.verify(productRepository).save(productArgumentCaptor.capture());
         Product savedProduct = productArgumentCaptor.getValue();
@@ -90,6 +91,24 @@ class ProductServiceTest {
             assertNotNull(s.getDate());
         });
         assertEquals(savedProduct.getStores().size(), 2);
+        savedProduct.getParameters().forEach(s -> assertEquals(s.getProduct(), existingProduct));
+    }
+    @Test
+    void saveProductByCategories() {
+        ArgumentCaptor<Product> productArgumentCaptor = ArgumentCaptor.forClass(Product.class);
+        Mockito.when(productRepository.findAll()).thenReturn(productList);
+        Mockito.when(productRepository.findProductByName(Mockito.anyString())).thenReturn(Optional.empty());
+
+        productService.save(newProduct1);
+
+        Mockito.verify(productRepository).save(productArgumentCaptor.capture());
+        Product savedProduct = productArgumentCaptor.getValue();
+        assertEquals(savedProduct.getName(), "existing Product");
+        savedProduct.getStores().forEach(s -> {
+            assertEquals(s.getProduct(), existingProduct);
+            assertNotNull(s.getDate());
+        });
+        assertEquals(savedProduct.getStores().size(), 3);
         savedProduct.getParameters().forEach(s -> assertEquals(s.getProduct(), existingProduct));
     }
 
@@ -138,38 +157,70 @@ class ProductServiceTest {
                 .setWeight(100)
                 .setWeightWithBox(80);
 
-        Store newStore = new Store()
+        Store newStore1 = new Store()
                 .setName("Super Store")
                 .setUrl("www.store.de")
-                .setCost(90.0);
+                .setCost(90.0)
+                .setDate(Date.from(Instant.ofEpochSecond(52)));
 
-        Store oldStore = new Store()
+        Store newStore2 = new Store()
                 .setName("Super Store")
                 .setUrl("www.store.de")
                 .setCost(100.0)
-                .setDate(Date.from(Instant.now()));
+                .setDate(Date.from(Instant.ofEpochSecond(52)));
+
+        Store oldStore1 = new Store()
+                .setName("Super Store")
+                .setUrl("www.store.de")
+                .setCost(90.0)
+                .setDate(Date.from(Instant.ofEpochSecond(50)));
+
+        Store oldStore2 = new Store()
+                .setName("Super Store")
+                .setUrl("www.store.de")
+                .setCost(100.0)
+                .setDate(Date.from(Instant.ofEpochSecond(51)));
 
         Parameter existingParameter = new Parameter();
 
         existingProduct = new Product()
                 .setType(Type.VIDEOCARD)
                 .setName("existing Product")
-                .setStores(ListUtils.of(oldStore))
+                .setStores(ListUtils.of(oldStore1, oldStore2))
                 .setParameters(ListUtils.of(existingParameter))
                 .setCountry("aaa")
                 .setWeight(100)
                 .setWeightWithBox(80);
 
-        oldStore.setProduct(existingProduct);
+        oldStore1.setProduct(existingProduct);
+        oldStore2.setProduct(existingProduct);
 
         existingParameter.setProduct(existingProduct);
 
         Parameter newParameter = new Parameter();
 
+        newProduct1 = new Product()
+                .setType(Type.VIDEOCARD)
+                .setName("existing Product jjjjj")
+                .setStores(ListUtils.of(newStore1))
+                .setParameters(ListUtils.of(newParameter))
+                .setCountry("aaa")
+                .setWeight(100)
+                .setWeightWithBox(80);
+
+        newProduct2 = new Product()
+                .setType(Type.VIDEOCARD)
+                .setName("existing Product jjjjj")
+                .setStores(ListUtils.of(newStore2))
+                .setParameters(ListUtils.of(newParameter))
+                .setCountry("aaa")
+                .setWeight(100)
+                .setWeightWithBox(80);
+
         newProduct = new Product()
                 .setType(Type.VIDEOCARD)
                 .setName("new Product")
-                .setStores(ListUtils.of(newStore))
+                .setStores(ListUtils.of(newStore1))
                 .setParameters(ListUtils.of(newParameter))
                 .setCountry("aaa")
                 .setWeight(100)
