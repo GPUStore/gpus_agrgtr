@@ -61,7 +61,7 @@ public class DnsParserTest extends AbstractParserTest {
             }
         }).when(webDriver).getPageSource();
         Mockito.doNothing()
-                .when(dnsParserSpy).checkDownloaded(List.of(HtmlClasses.SPECIFICATION_CLASS.getClassName()));
+                .when(dnsParserSpy).checkDownloaded(List.of(HtmlClasses.SPECIFICATION.getName()));
         Mockito.doReturn(new Characteristic().setName("characteristic1"))
                 .when(dnsParserSpy).toCharacteristic("Основные параметры");
         Mockito.doReturn(new Characteristic().setName("characteristic2"))

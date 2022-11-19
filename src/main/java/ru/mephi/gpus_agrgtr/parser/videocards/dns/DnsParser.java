@@ -71,7 +71,7 @@ public class DnsParser extends Parser {
             for (int i = 0; i < links.size(); i++) {
                 try {
                     page = getPageWithWaitingSomeElements(links.get(i),
-                            List.of(HtmlClasses.SPECIFICATION_CLASS.getClassName()));
+                            List.of(HtmlClasses.SPECIFICATION.getName()));
                     products.add(getProduct(page, costs.get(i), links.get(i), names.get(i)));
                     log.info("Product with link :{} was handled", links.get(i));
                 } catch (RuntimeException e) {
@@ -101,16 +101,16 @@ public class DnsParser extends Parser {
     }
 
     private int getCountPages(Document page) {
-        String className = Optional
-                .ofNullable(page.select(HtmlClasses.PAGINATION_ELEMENT.getClassName()).last())
+        String countPages = Optional
+                .ofNullable(page.select(HtmlClasses.PAGINATION_ELEMENT.getName()).last())
                 .orElseThrow(() -> new RuntimeException("Unable to load pagination element"))
-                .attr(HtmlClasses.PAGINATION_ATTRIBUTE.getClassName());
-        return Integer.parseInt(className);
+                .attr(HtmlClasses.PAGINATION_ATTRIBUTE.getName());
+        return Integer.parseInt(countPages);
     }
 
     private List<Double> getCosts(Document page) {
-        return page.select(HtmlClasses.COST_CLASS.getClassName())
-                .select(HtmlClasses.SUB_FOR_COSTS_CLASS.getClassName())
+        return page.select(HtmlClasses.COST.getName())
+                .select(HtmlClasses.SUB_FOR_COSTS.getName())
                 .stream()
                 .filter(Objects::nonNull)
                 .map(Element::text)
@@ -120,7 +120,7 @@ public class DnsParser extends Parser {
     }
 
     private List<String> getNames(Document page) {
-        return page.select(HtmlClasses.LINK_CLASS.getClassName()).stream()
+        return page.select(HtmlClasses.LINK.getName()).stream()
                 .filter(Objects::nonNull)
                 .map(Element::text)
                 .map(title -> getByPattern(NAME, title))
@@ -129,34 +129,34 @@ public class DnsParser extends Parser {
                 .toList();
     }
 
-    public static String getReplacedName(String strn) {
+    public static String getReplacedName(String name) {
         Pattern pattern = Pattern.compile(NAME_BRACKETS);
-        Matcher matcher = pattern.matcher(strn);
+        Matcher matcher = pattern.matcher(name);
         int count = 0;
         while (matcher.find()) {
             if (count >= 3) {
                 break;
             }
-            strn = switch (++count) {
+            name = switch (++count) {
                 case 1 -> {
-                    char[] chars = strn.toCharArray();
+                    char[] chars = name.toCharArray();
                     chars[matcher.start()] = '(';
                     yield String.valueOf(chars);
                 }
                 case 2 -> {
-                    char[] chars = strn.toCharArray();
+                    char[] chars = name.toCharArray();
                     chars[matcher.start()] = ')';
                     yield String.valueOf(chars);
                 }
-                case 3 -> strn.substring(0, matcher.start()).trim();
-                default -> strn;
+                case 3 -> name.substring(0, matcher.start()).trim();
+                default -> name;
             };
         }
-        return strn;
+        return name;
     }
 
     private List<String> getLinks(Document page) {
-        return page.select(HtmlClasses.LINK_CLASS.getClassName()).stream()
+        return page.select(HtmlClasses.LINK.getName()).stream()
                 .filter(Objects::nonNull)
                 .map(element -> element.attr("href"))
                 .map(href -> url + href)
@@ -238,37 +238,39 @@ public class DnsParser extends Parser {
         SpecificationsDTO specificationsDTO = new SpecificationsDTO();
         List<FullDTO> fullDTOList = new ArrayList<>();
         page
-                .select(HtmlClasses.SPECIFICATION_CLASS.getClassName())
-                .select(HtmlClasses.CHARACTERISTIC_GROUP_CLASS.getClassName())
+                .select(HtmlClasses.SPECIFICATION.getName())
+                .select(HtmlClasses.CHARACTERISTIC_GROUP.getName())
                 .stream()
                 .filter(Objects::nonNull)
-                .forEach(group -> fullDTOList.add(getFullDTOOfElement(group)));
+                .forEach(group -> fullDTOList.add(getFullDTO(group)));
 
         specificationsDTO.setFull(fullDTOList);
         return specificationsDTO;
     }
 
-    private FullDTO getFullDTOOfElement(Element groupElement) {
+    private FullDTO getFullDTO(Element groupElement) {
         return FullDTO.builder()
                 .name(groupElement.select(HtmlClasses
-                        .CHARACTERISTIC_NAME_CLASS.getClassName()).text())
-                .list( groupElement.select(HtmlClasses.PARAM_CLASS.getClassName())
+                        .CHARACTERISTIC_NAME.getName()).text())
+                .list( groupElement.select(HtmlClasses.SPECIFICATION_PARAM.getName())
                         .stream()
-                        .map(
-                                parameter -> ParamDTO.builder()
-                                        .name(Objects.requireNonNull(parameter
-                                                        .selectFirst(HtmlClasses
-                                                                .PARAM_NAME_CLASS
-                                                                .getClassName()))
-                                                .text())
-                                        .value(Objects.requireNonNull(parameter
-                                                        .selectFirst(HtmlClasses
-                                                                .PARAM_VALUE_CLASS
-                                                                .getClassName()))
-                                                .text())
-                                        .build()
-                        )
+                        .map(this::getParamDTO)
                         .collect(Collectors.toList()))
+                .build();
+    }
+
+    private ParamDTO getParamDTO(Element parameter) {
+        return ParamDTO.builder()
+                .name(Objects.requireNonNull(parameter
+                                .selectFirst(HtmlClasses
+                                        .PARAM_NAME
+                                        .getName()))
+                        .text())
+                .value(Objects.requireNonNull(parameter
+                                .selectFirst(HtmlClasses
+                                        .PARAM_VALUE
+                                        .getName()))
+                        .text())
                 .build();
     }
 
