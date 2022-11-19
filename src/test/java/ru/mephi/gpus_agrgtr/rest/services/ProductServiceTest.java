@@ -24,17 +24,10 @@ class ProductServiceTest {
     @Mock
     private static ProductRepository productRepository;
 
-    private static Store store;
     List<Product> productList;
     private static Product product;
     private static Product existingProduct;
     private static Product newProduct;
-    private static Parameter parameter;
-    private static Parameter newParameter;
-    private static Parameter existingParameter;
-
-    private static Store newStore;
-    private static Store oldStore;
 
     @BeforeEach
     void setUp() {
@@ -131,11 +124,11 @@ class ProductServiceTest {
 
     @BeforeEach
     void testingSubjects() {
-        store = new Store()
+        Store store = new Store()
                 .setName("Super Store")
                 .setUrl("www.store.de")
                 .setCost(100.0);
-        parameter = new Parameter();
+        Parameter parameter = new Parameter();
         product = new Product()
                 .setType(Type.VIDEOCARD)
                 .setName("lasdjfldsjfl; a;lsdjfla;skdjfl laskdjf;lsakdfj")
@@ -145,18 +138,18 @@ class ProductServiceTest {
                 .setWeight(100)
                 .setWeightWithBox(80);
 
-        newStore = new Store()
+        Store newStore = new Store()
                 .setName("Super Store")
                 .setUrl("www.store.de")
                 .setCost(90.0);
 
-        oldStore = new Store()
+        Store oldStore = new Store()
                 .setName("Super Store")
                 .setUrl("www.store.de")
                 .setCost(100.0)
                 .setDate(Date.from(Instant.now()));
 
-        existingParameter = new Parameter();
+        Parameter existingParameter = new Parameter();
 
         existingProduct = new Product()
                 .setType(Type.VIDEOCARD)
@@ -171,7 +164,7 @@ class ProductServiceTest {
 
         existingParameter.setProduct(existingProduct);
 
-        newParameter = new Parameter();
+        Parameter newParameter = new Parameter();
 
         newProduct = new Product()
                 .setType(Type.VIDEOCARD)
