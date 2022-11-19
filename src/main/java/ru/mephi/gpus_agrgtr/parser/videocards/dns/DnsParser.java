@@ -187,27 +187,27 @@ public class DnsParser extends Parser {
         }
     }
 
-    private boolean delayControl(List<String> classElements) {
+    private boolean delayControl(List<String> classElementsToCheck) {
         Duration current = Duration.ofMillis(START_WAIT_TIME_AS_MILLIS_ELEMENT);
         WebDriverWait webDriverWait = new WebDriverWait(webDriver, current);
-        AtomicReference<Boolean> curFlag = new AtomicReference<>(false);
-        Boolean generalFlag = true;
+        AtomicReference<Boolean> isInvisible = new AtomicReference<>(false);
+        Boolean isVisible = true;
         ArrayList<String> list = new ArrayList<>();
         int count = 0;
         do {
             WebDriverWait finalWebDriverWait = webDriverWait;
-            classElements.parallelStream().forEach(classElement -> {
-                curFlag.set(finalWebDriverWait.until(ExpectedConditions.invisibilityOfElementLocated
+            classElementsToCheck.parallelStream().forEach(classElement -> {
+                isInvisible.set(finalWebDriverWait.until(ExpectedConditions.invisibilityOfElementLocated
                         (By.className(classElement))));
-                if (curFlag.get()) {
+                if (isInvisible.get()) {
                     list.add(classElement);
-                    curFlag.set(false);
+                    isInvisible.set(false);
                 }
             });
             if (!list.isEmpty()) {
                 for (String s : list) {
-                    if (generalFlag) {
-                        generalFlag = webDriverWait.until(ExpectedConditions.invisibilityOfElementLocated
+                    if (isVisible) {
+                        isVisible = webDriverWait.until(ExpectedConditions.invisibilityOfElementLocated
                                 (By.className(s)));
                     } else {
                         webDriverWait.until(ExpectedConditions.invisibilityOfElementLocated
@@ -217,8 +217,8 @@ public class DnsParser extends Parser {
             }
             webDriverWait = new WebDriverWait(webDriver, current.plus(Duration.ofSeconds(EXTRA_TIME_AS_SECONDS)));
             count++;
-        } while (!generalFlag || count != 3);
-        return generalFlag;
+        } while (!isVisible || count != 3);
+        return isVisible;
     }
 
     private Product getProduct(Document page, Double cost, String link, String name) {

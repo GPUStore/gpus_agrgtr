@@ -1,9 +1,7 @@
 package ru.mephi.gpus_agrgtr;
 
 import org.springframework.boot.SpringApplication;
-import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.cloud.netflix.eureka.EnableEurekaClient;
-
 
 @EnableEurekaClient
 public class GpusAgrgtrApplication{
