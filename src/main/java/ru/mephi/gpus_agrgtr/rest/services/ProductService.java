@@ -1,4 +1,5 @@
 package ru.mephi.gpus_agrgtr.rest.services;
+
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -8,10 +9,10 @@ import ru.mephi.gpus_agrgtr.entity.Category;
 import ru.mephi.gpus_agrgtr.entity.Product;
 import ru.mephi.gpus_agrgtr.entity.Store;
 import ru.mephi.gpus_agrgtr.rest.repositories.ProductRepository;
+
 import java.time.Instant;
 import java.util.*;
 import java.util.function.Supplier;
-import java.util.stream.Collectors;
 
 @Service
 @Slf4j
@@ -25,7 +26,7 @@ public class ProductService {
         populate(product);
         Optional<Product> foundProduct = find(product.getName());
         if (foundProduct.isPresent()) {
-            addStores(product, foundProduct.get());
+            updateStores(product, foundProduct.get());
             productRepository.save(foundProduct.get());
         } else {
             productRepository.save(product);
@@ -45,46 +46,14 @@ public class ProductService {
                 });
     }
 
+    public Set<Category> getCategories(Product product) {
+        return categoryExtractor.extractCategorySet(product.getName());
+    }
+
     private Optional<Product> find(String productName) {
         return productRepository
                 .findProductByName(productName)
                 .or(findProductByCategories(categoryExtractor.extractCategorySet(productName)));
-    }
-
-    private void addStores(Product newProduct, Product oldProduct) {
-        Map<String, Double> urlLastPrice = getUrlLastPrice(oldProduct);
-        newProduct.getStores()
-                .forEach(store -> {
-                    double newStorePrice = store.getCost();
-                    Double oldStoreLastPrice = urlLastPrice.get(store.getUrl());
-                    if (oldStoreLastPrice == null || !oldStoreLastPrice.equals(newStorePrice)) {
-                        store.setProduct(oldProduct);
-                        oldProduct.getStores().add(store);
-                    }
-                });
-    }
-
-    private static Map<String, Double> getUrlLastPrice(Product oldProduct) {
-        return getEachStoreGroupedByUrl(oldProduct).entrySet()
-                .stream().collect(Collectors.toMap(
-                        Map.Entry::getKey,
-                        e -> e.getValue()
-                                .stream()
-                                .reduce((s1, s2) -> s1.getDate().compareTo(s2.getDate()) > 0 ? s1 : s2)
-                                .orElseThrow(() -> new IllegalArgumentException("No date in store!"))
-                                .getCost()
-                ));
-    }
-
-    private static Map<String, List<Store>> getEachStoreGroupedByUrl(Product oldProduct) {
-        return oldProduct
-                .getStores()
-                .stream()
-                .collect(Collectors.groupingBy(Store::getUrl));
-    }
-
-    public Set<Category> getCategories(Product product) {
-        return categoryExtractor.extractCategorySet(product.getName());
     }
 
     public Supplier<? extends Optional<? extends Product>> findProductByCategories(Set<Category> categories) {
@@ -94,4 +63,41 @@ public class ProductService {
                         .filter(p -> categoryExtractor.isEqual(getCategories(p), categories))
                         .findFirst();
     }
+
+    private void updateStores(Product newProduct, Product oldProduct) {
+        if (newProduct.getStores().size() != 1) {
+            throw new IllegalArgumentException("Wrong number of stores");
+        }
+        Store newStore = newProduct.getStores().get(0);
+        Store lastStore = getLastStoreWithSameUrl(oldProduct, newStore.getUrl());
+        if (lastStore == null) {
+            addStore(oldProduct, newStore);
+            return;
+        }
+        if (!Objects.equals(lastStore.getCost(), newStore.getCost())) {
+            addStore(oldProduct, newStore);
+        }
+    }
+
+    private static Store getLastStoreWithSameUrl(Product oldProduct, String url) {
+        Store lastStore = null;
+        for (Store s : oldProduct.getStores()) {
+            if (!s.getUrl().equals(url)) {
+                continue;
+            }
+            if (lastStore == null) {
+                lastStore = s;
+            }
+            if (s.getDate().compareTo(lastStore.getDate()) > 0) {
+                lastStore = s;
+            }
+        }
+        return lastStore;
+    }
+
+    private static void addStore(Product oldProduct, Store newStore) {
+        oldProduct.getStores().add(newStore);
+        newStore.setProduct(oldProduct);
+    }
+
 }
