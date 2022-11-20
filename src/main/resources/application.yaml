@@ -39,3 +39,10 @@ technopark:
     list: https://www.technopark.ru/videokarty/?p=%d
     base: https://www.technopark.ru/
     product: https://www.technopark.ru/graphql/
+
+dns:
+  name: DNS Store
+  url:
+    list:  https://www.dns-shop.ru/catalog/17a89aab16404e77/videokarty/?p=%d
+    base:  https://www.dns-shop.ru/
+    product: https://www.dns-shop.ru/product/

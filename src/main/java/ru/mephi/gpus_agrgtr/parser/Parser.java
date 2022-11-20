@@ -13,6 +13,7 @@ import ru.mephi.gpus_agrgtr.entity.Product;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 @Component
@@ -36,7 +37,7 @@ public abstract class Parser {
         try {
             return getAllProducts();
         } catch (Exception e) {
-            log.info("Page parsing failed: " + url + '\n' + e.getMessage());
+            log.info("Page parsing failed: " + url + '\n' + Arrays.toString(e.getStackTrace()));
             return new ArrayList<>();
         }
     }

@@ -43,6 +43,7 @@ public class ProductService {
                 categoryService.save(categorySet);
 
                 productRepository.save(product);
+                log.info("Product saved: {}" ,product.getName(), product.getStores());
             }
         }
         System.out.println();
