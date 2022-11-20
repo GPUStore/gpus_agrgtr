@@ -6,7 +6,7 @@ import org.springframework.cloud.netflix.eureka.EnableEurekaClient;
 
 @SpringBootApplication
 @EnableEurekaClient
-public class GpusAgrgtrApplication{
+public class GpusAgrgtrApplication {
 
     public static void main(String[] args) {
         SpringApplication.run(GpusAgrgtrApplication.class, args);
