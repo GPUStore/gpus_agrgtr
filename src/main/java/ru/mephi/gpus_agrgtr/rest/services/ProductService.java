@@ -1,5 +1,4 @@
 package ru.mephi.gpus_agrgtr.rest.services;
-
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -9,7 +8,6 @@ import ru.mephi.gpus_agrgtr.entity.Category;
 import ru.mephi.gpus_agrgtr.entity.Product;
 import ru.mephi.gpus_agrgtr.entity.Store;
 import ru.mephi.gpus_agrgtr.rest.repositories.ProductRepository;
-
 import java.time.Instant;
 import java.util.*;
 import java.util.function.Supplier;
@@ -54,11 +52,20 @@ public class ProductService {
     }
 
     private void addStores(Product newProduct, Product oldProduct) {
-        Map<String, Double> eachStoreLastPriceGroupedByName = oldProduct
-                .getStores()
-                .stream()
-                .collect(Collectors.groupingBy(Store::getName))
-                .entrySet()
+        Map<String, Double> urlLastPrice = getUrlLastPrice(oldProduct);
+        newProduct.getStores()
+                .forEach(store -> {
+                    double newStorePrice = store.getCost();
+                    Double oldStoreLastPrice = urlLastPrice.get(store.getUrl());
+                    if (oldStoreLastPrice == null || !oldStoreLastPrice.equals(newStorePrice)) {
+                        store.setProduct(oldProduct);
+                        oldProduct.getStores().add(store);
+                    }
+                });
+    }
+
+    private static Map<String, Double> getUrlLastPrice(Product oldProduct) {
+        return getEachStoreGroupedByUrl(oldProduct).entrySet()
                 .stream().collect(Collectors.toMap(
                         Map.Entry::getKey,
                         e -> e.getValue()
@@ -67,15 +74,13 @@ public class ProductService {
                                 .orElseThrow(() -> new IllegalArgumentException("No date in store!"))
                                 .getCost()
                 ));
-        newProduct.getStores()
-                .forEach(store -> {
-                    double newStorePrice = store.getCost();
-                    Double oldStoreLastPrice = eachStoreLastPriceGroupedByName.get(store.getName());
-                    if (oldStoreLastPrice != null && !oldStoreLastPrice.equals(newStorePrice)) {
-                        store.setProduct(oldProduct);
-                        oldProduct.getStores().add(store);
-                    }
-                });
+    }
+
+    private static Map<String, List<Store>> getEachStoreGroupedByUrl(Product oldProduct) {
+        return oldProduct
+                .getStores()
+                .stream()
+                .collect(Collectors.groupingBy(Store::getUrl));
     }
 
     public Set<Category> getCategories(Product product) {
@@ -90,5 +95,3 @@ public class ProductService {
                         .findFirst();
     }
 }
-
-

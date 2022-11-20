@@ -30,6 +30,7 @@ class ProductServiceTest {
     private static Product newProduct;
     private static Product newProduct1;
     private static Product newProduct2;
+    private static Product newProduct3;
 
     @BeforeEach
     void setUp() {
@@ -77,6 +78,24 @@ class ProductServiceTest {
     }
 
     @Test
+    void saveExistingProductWithNewStore() {
+        Mockito.when(productRepository.findProductByName(Mockito.anyString())).thenReturn(Optional.of(existingProduct));
+        ArgumentCaptor<Product> productArgumentCaptor = ArgumentCaptor.forClass(Product.class);
+
+        productService.save(newProduct3);
+
+        Mockito.verify(productRepository).save(productArgumentCaptor.capture());
+        Product savedProduct = productArgumentCaptor.getValue();
+        assertEquals(savedProduct.getName(), "existing Product");
+        savedProduct.getStores().forEach(s -> {
+            assertEquals(s.getProduct(), existingProduct);
+            assertNotNull(s.getDate());
+        });
+        assertEquals(savedProduct.getStores().size(), 3);
+        savedProduct.getParameters().forEach(s -> assertEquals(s.getProduct(), existingProduct));
+    }
+
+    @Test
     void saveExistingProductSamePrice() {
         Mockito.when(productRepository.findProductByName(Mockito.anyString())).thenReturn(Optional.of(existingProduct));
         ArgumentCaptor<Product> productArgumentCaptor = ArgumentCaptor.forClass(Product.class);
@@ -93,6 +112,7 @@ class ProductServiceTest {
         assertEquals(savedProduct.getStores().size(), 2);
         savedProduct.getParameters().forEach(s -> assertEquals(s.getProduct(), existingProduct));
     }
+
     @Test
     void saveProductByCategories() {
         ArgumentCaptor<Product> productArgumentCaptor = ArgumentCaptor.forClass(Product.class);
@@ -163,6 +183,12 @@ class ProductServiceTest {
                 .setCost(90.0)
                 .setDate(Date.from(Instant.ofEpochSecond(52)));
 
+        Store newStore3 = new Store()
+                .setName("Hyper Store")
+                .setUrl("www.store.ru")
+                .setCost(90.0)
+                .setDate(Date.from(Instant.ofEpochSecond(52)));
+
         Store newStore2 = new Store()
                 .setName("Super Store")
                 .setUrl("www.store.de")
@@ -212,6 +238,15 @@ class ProductServiceTest {
                 .setType(Type.VIDEOCARD)
                 .setName("existing Product jjjjj")
                 .setStores(ListUtils.of(newStore2))
+                .setParameters(ListUtils.of(newParameter))
+                .setCountry("aaa")
+                .setWeight(100)
+                .setWeightWithBox(80);
+
+        newProduct3 = new Product()
+                .setType(Type.VIDEOCARD)
+                .setName("existing Product jjjjj")
+                .setStores(ListUtils.of(newStore3))
                 .setParameters(ListUtils.of(newParameter))
                 .setCountry("aaa")
                 .setWeight(100)
