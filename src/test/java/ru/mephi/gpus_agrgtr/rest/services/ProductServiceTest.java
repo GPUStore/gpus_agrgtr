@@ -23,7 +23,6 @@ class ProductServiceTest {
     private static ProductService productService;
     @Mock
     private static ProductRepository productRepository;
-
     List<Product> productList;
     private static Product product;
     private static Product existingProduct;

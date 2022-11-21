@@ -1,7 +1,6 @@
 package ru.mephi.gpus_agrgtr.rest.services;
 
 import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import ru.mephi.gpus_agrgtr.category.CategoryExtractor;
@@ -15,7 +14,6 @@ import java.util.*;
 import java.util.function.Supplier;
 
 @Service
-@Slf4j
 @RequiredArgsConstructor
 public class ProductService {
     private final ProductRepository productRepository;
