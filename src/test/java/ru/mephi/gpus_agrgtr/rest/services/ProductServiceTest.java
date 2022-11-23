@@ -43,7 +43,6 @@ class ProductServiceTest extends AbstractProductTest {
     @Test
     void saveNewProduct() {
         ArgumentCaptor<Product> productArgumentCaptor = ArgumentCaptor.forClass(Product.class);
-        Mockito.when(productRepository.findAll()).thenReturn(new ArrayList<>());
         Mockito.when(productRepository.findProductByName(Mockito.anyString())).thenReturn(Optional.empty());
         Mockito.when(dateUtils.getNow()).thenReturn(Date.from(Instant.ofEpochSecond(101L)));
         Mockito.when(categoryExtractor.extractCategorySet(Mockito.anyString())).thenReturn(Set.of(new Category("Product"), new Category("XXX1")));
@@ -57,7 +56,6 @@ class ProductServiceTest extends AbstractProductTest {
     @Test
     void saveExistingProduct() {
         ArgumentCaptor<Product> productArgumentCaptor = ArgumentCaptor.forClass(Product.class);
-        Mockito.when(productRepository.findAll()).thenReturn(new ArrayList<>());
         Mockito.when(productRepository.findProductByName(Mockito.anyString())).thenReturn(Optional.ofNullable(td.getExistingProducts().get(1)));
         Mockito.when(dateUtils.getNow()).thenReturn(Date.from(Instant.ofEpochSecond(102L)));
 
@@ -72,7 +70,6 @@ class ProductServiceTest extends AbstractProductTest {
     @Test
     void saveExistingProductWithNewStore() {
         ArgumentCaptor<Product> productArgumentCaptor = ArgumentCaptor.forClass(Product.class);
-        Mockito.when(productRepository.findAll()).thenReturn(new ArrayList<>());
         Mockito.when(productRepository.findProductByName(Mockito.anyString())).thenReturn(Optional.ofNullable(td.getExistingProducts().get(2)));
         Mockito.when(dateUtils.getNow()).thenReturn(Date.from(Instant.ofEpochSecond(103L)));
 
@@ -104,7 +101,6 @@ class ProductServiceTest extends AbstractProductTest {
         Mockito.when(productRepository.findAll()).thenReturn(List.of(td.getExistingProducts().get(4)));
         Mockito.when(productRepository.findProductByName(Mockito.anyString())).thenReturn(Optional.empty());
         Mockito.when(dateUtils.getNow()).thenReturn(Date.from(Instant.ofEpochSecond(105L)));
-        Mockito.when(productRepository.findProductByName(Mockito.anyString())).thenReturn(Optional.empty());
         Mockito.when(categoryExtractor.isEqual(Mockito.anySet(), Mockito.anySet())).thenReturn(true);
 
         productService.save(td.getProductsToSave().get(4));
