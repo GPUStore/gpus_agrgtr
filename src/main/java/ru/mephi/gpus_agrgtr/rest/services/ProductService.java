@@ -8,8 +8,8 @@ import ru.mephi.gpus_agrgtr.entity.Category;
 import ru.mephi.gpus_agrgtr.entity.Product;
 import ru.mephi.gpus_agrgtr.entity.Store;
 import ru.mephi.gpus_agrgtr.rest.repositories.ProductRepository;
+import ru.mephi.gpus_agrgtr.utils.DateUtils;
 
-import java.time.Instant;
 import java.util.*;
 import java.util.function.Supplier;
 
@@ -18,6 +18,7 @@ import java.util.function.Supplier;
 public class ProductService {
     private final ProductRepository productRepository;
     private final CategoryExtractor categoryExtractor;
+    private final DateUtils dateUtils;
 
     @Transactional
     public void save(Product product) {
@@ -40,7 +41,7 @@ public class ProductService {
         product.getStores()
                 .forEach(store -> {
                     store.setProduct(product);
-                    store.setDate(Date.from(Instant.now()));
+                    store.setDate(dateUtils.getNow());
                 });
     }
 

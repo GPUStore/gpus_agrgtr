@@ -5,7 +5,7 @@ import ru.mephi.gpus_agrgtr.utils.ListUtils;
 
 import java.util.List;
 
-public class TestData {
+public class ParserTestData {
 
     public static List<Product> getTestProducts() {
         return List.of(

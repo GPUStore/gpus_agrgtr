@@ -10,7 +10,7 @@ import ru.mephi.gpus_agrgtr.entity.Product;
 import ru.mephi.gpus_agrgtr.parser.videocards.technopark.TechnoparkParser;
 import ru.mephi.gpus_agrgtr.parser.videocards.technopark.response.Response;
 import ru.mephi.gpus_agrgtr.parser.videocards.test.AbstractParserTest;
-import ru.mephi.gpus_agrgtr.parser.videocards.test.TestData;
+import ru.mephi.gpus_agrgtr.parser.videocards.test.ParserTestData;
 
 import java.io.IOException;
 import java.util.List;
@@ -71,7 +71,7 @@ class TechnoparkParserTest extends AbstractParserTest {
                 .when(technoparkParser).toCharacteristic("characteristic2");
 
         List<Product> actualProducts = technoparkParser.getAllProducts();
-        List<Product> expectedProducts = TestData.getTestProducts();
+        List<Product> expectedProducts = ParserTestData.getTestProducts();
 
         assertEquals(expectedProducts.size(), actualProducts.size());
         assertProducts(expectedProducts.get(0), actualProducts.get(0));
