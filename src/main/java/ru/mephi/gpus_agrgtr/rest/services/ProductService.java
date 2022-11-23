@@ -22,17 +22,17 @@ public class ProductService {
 
     @Transactional
     public void save(Product product) {
-        populate(product);
+        addLinks(product);
         Optional<Product> foundProduct = find(product.getName());
         if (foundProduct.isPresent()) {
-            updateStores(product, foundProduct.get());
+            addStoresFromNewProduct(product, foundProduct.get());
             productRepository.save(foundProduct.get());
         } else {
             productRepository.save(product);
         }
     }
 
-    private void populate(Product product) {
+    private void addLinks(Product product) {
         Set<Category> categorySet = getCategories(product);
         categorySet.forEach(category -> category.getProducts().add(product));
         product.setCategories(categorySet)
@@ -63,7 +63,7 @@ public class ProductService {
                         .findFirst();
     }
 
-    private void updateStores(Product newProduct, Product oldProduct) {
+    private void addStoresFromNewProduct(Product newProduct, Product oldProduct) {
         if (newProduct.getStores().size() != 1) {
             throw new IllegalArgumentException("Wrong number of stores");
         }
