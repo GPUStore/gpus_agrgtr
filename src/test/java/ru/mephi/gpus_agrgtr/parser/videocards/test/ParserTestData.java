@@ -34,7 +34,7 @@ public class ParserTestData {
         );
     }
 
-    private static Product createProduct(int number) {
+    protected static Product createProduct(int number) {
         return new Product()
                 .setType(Type.VIDEOCARD)
                 .setName("PRODUCT" + number)
@@ -44,7 +44,7 @@ public class ParserTestData {
                 ;
     }
 
-    private static Store createStore(int number) {
+    protected static Store createStore(int number) {
         return new Store()
                 .setName("store" + number)
                 .setCost(1.0)
@@ -52,14 +52,14 @@ public class ParserTestData {
                 ;
     }
 
-    private static Parameter createParameter(int number) {
+    protected static Parameter createParameter(int number) {
         return new Parameter()
                 .setName("name" + number)
                 .setValue("value" + number)
                 ;
     }
 
-    private static Characteristic createCharacteristic(int number) {
+    protected static Characteristic createCharacteristic(int number) {
         return new Characteristic().setName("characteristic" + number);
     }
 }

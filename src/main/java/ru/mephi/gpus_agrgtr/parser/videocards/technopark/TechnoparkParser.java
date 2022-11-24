@@ -57,10 +57,11 @@ public class TechnoparkParser extends Parser {
 
     @Override
     public List<Product> getAllProducts() {
+        int numberOfPage = 1;
         List<Product> products = new ArrayList<>();
-        Document page = getPage(1);
+        Document page = getPage(numberOfPage);
         int countPages = getCountPages(page);
-        for (int numberOfPage = 1; numberOfPage <= countPages; numberOfPage++) {
+        while (true) {
             List<Double> costs = getCosts(page);
             List<String> links = getLinks(page);
             List<String> names = getNames(page);
@@ -73,7 +74,11 @@ public class TechnoparkParser extends Parser {
                     log.info("Product with article [" + articles.get(i) + "] was not created.");
                 }
             }
-            page = getPage(numberOfPage);
+            if (++numberOfPage <= countPages) {
+                page = getPage(numberOfPage);
+            } else {
+                break;
+            }
         }
         return products;
     }

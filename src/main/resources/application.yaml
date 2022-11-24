@@ -1,7 +1,9 @@
 server:
-  port: 8080
+  port: 0
 
 spring:
+  application:
+    name: agrgtr
   datasource:
     url: jdbc:postgresql://localhost:5432/gpus_db
     username: postgres
@@ -11,14 +13,25 @@ spring:
     show-sql: true
     open-in-view: false
 
+eureka:
+  client:
+    register-with-eureka: true
+    fetch-registry: true
+    service-url:
+      defaultZone: http://localhost:8761/eureka
+
+agrgtr:
+  cron: 0 0 0 * * * #каждый день в полночь
+
 logging:
+  file:
+    name: src/main/resources/application-debug.log
   pattern:
-    console: "%d{yyyy-MM-dd HH:mm:ss} - %msg%n"
+    file: "%d{yyyy-MM-dd HH:mm:ss} [%thread] %-5level %logger{36} - %msg%n"
   level:
-    root: info
     org:
-      hibernate:
-      springframework: info
+      springframework:
+        web: TRACE
 
 technopark:
   name: Technopark
@@ -26,3 +39,10 @@ technopark:
     list: https://www.technopark.ru/videokarty/?p=%d
     base: https://www.technopark.ru/
     product: https://www.technopark.ru/graphql/
+
+dns:
+  name: DNS Store
+  url:
+    list:  https://www.dns-shop.ru/catalog/17a89aab16404e77/videokarty/?p=%d
+    base:  https://www.dns-shop.ru/
+    product: https://www.dns-shop.ru/product/

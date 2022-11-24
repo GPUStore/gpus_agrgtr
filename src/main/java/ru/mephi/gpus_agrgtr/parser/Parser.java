@@ -1,6 +1,7 @@
 package ru.mephi.gpus_agrgtr.parser;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.jsoup.Connection;
@@ -12,10 +13,12 @@ import ru.mephi.gpus_agrgtr.entity.Product;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 @Component
 @RequiredArgsConstructor
+@Getter
 @Slf4j
 public abstract class Parser {
     protected String url;
@@ -34,7 +37,7 @@ public abstract class Parser {
         try {
             return getAllProducts();
         } catch (Exception e) {
-            log.info("Page parsing failed: " + url + '\n' + e.getMessage());
+            log.info("Page parsing failed: " + url + '\n' + Arrays.toString(e.getStackTrace()));
             return new ArrayList<>();
         }
     }
