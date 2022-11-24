@@ -39,7 +39,6 @@ class ProductServiceTest extends AbstractProductTest {
         productService = new ProductService(productRepository, categoryExtractor, dateUtils);
     }
 
-
     @Test
     void saveNewProduct() {
         ArgumentCaptor<Product> productArgumentCaptor = ArgumentCaptor.forClass(Product.class);
