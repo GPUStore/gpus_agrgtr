@@ -1,66 +1,101 @@
 package ru.mephi.gpus_agrgtr.rest.services;
 
 import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import ru.mephi.gpus_agrgtr.category.CategoryExtractor;
 import ru.mephi.gpus_agrgtr.entity.Category;
 import ru.mephi.gpus_agrgtr.entity.Product;
+import ru.mephi.gpus_agrgtr.entity.Store;
 import ru.mephi.gpus_agrgtr.rest.repositories.ProductRepository;
+import ru.mephi.gpus_agrgtr.utils.DateUtils;
 
-import java.util.List;
-import java.util.Optional;
-import java.util.Set;
+import java.util.*;
+import java.util.function.Supplier;
 
 @Service
-@Slf4j
 @RequiredArgsConstructor
 public class ProductService {
-
     private final ProductRepository productRepository;
-    private final CategoryService categoryService;
     private final CategoryExtractor categoryExtractor;
+    private final DateUtils dateUtils;
 
     @Transactional
-    public void save(List<Product> products) {
-        for (Product product : products) {
-            Product prod = productRepository.findProductByName(product.getName()).orElse(null);
-            if (prod == null) {
-                prod = findProductByCategories(getCategories(product)).orElse(null);
-                if (prod != null) {
-                    log.info("found product by categories:" + product.getName() + "=" + prod.getName());
-                }
-            }
-            if (prod == null) {
-                Set<Category> categorySet = getCategories(product);
-                categorySet.forEach(category -> category.getProducts().add(product));
-                product.setCategories(categorySet)
-                        .getParameters()
-                        .forEach(parameter -> parameter.setProduct(product));
-                product.getStores()
-                        .forEach(store -> store.setProduct(product));
-                categoryService.save(categorySet);
-
-                productRepository.save(product);
-                log.info("Product saved: {}" ,product.getName(), product.getStores());
-            }
+    public void save(Product product) {
+        addLinks(product);
+        Optional<Product> foundProduct = find(product.getName());
+        if (foundProduct.isPresent()) {
+            addStoresFromNewProduct(product, foundProduct.get());
+            productRepository.save(foundProduct.get());
+        } else {
+            productRepository.save(product);
         }
-        System.out.println();
+    }
+
+    private void addLinks(Product product) {
+        Set<Category> categorySet = getCategories(product);
+        categorySet.forEach(category -> category.getProducts().add(product));
+        product.setCategories(categorySet)
+                .getParameters()
+                .forEach(parameter -> parameter.setProduct(product));
+        product.getStores()
+                .forEach(store -> {
+                    store.setProduct(product);
+                    store.setDate(dateUtils.getNow());
+                });
     }
 
     public Set<Category> getCategories(Product product) {
-        Optional<Product> productFromDb = productRepository.findProductByName(product.getName());
-        if (productFromDb.isPresent())
-            return productFromDb.get().getCategories();
         return categoryExtractor.extractCategorySet(product.getName());
     }
 
-    public Optional<Product> findProductByCategories(Set<Category> categories) {
+    private Optional<Product> find(String productName) {
+        return productRepository
+                .findProductByName(productName)
+                .or(findProductByCategories(categoryExtractor.extractCategorySet(productName)));
+    }
+
+    public Supplier<? extends Optional<? extends Product>> findProductByCategories(Set<Category> categories) {
         List<Product> products = productRepository.findAll();
-        return products.stream()
-                .filter(p -> categoryExtractor.isEqual(getCategories(p), categories))
-                .findFirst();
+        return () ->
+                products.stream()
+                        .filter(p -> categoryExtractor.isEqual(getCategories(p), categories))
+                        .findFirst();
+    }
+
+    private void addStoresFromNewProduct(Product newProduct, Product oldProduct) {
+        if (newProduct.getStores().size() != 1) {
+            throw new IllegalArgumentException("Wrong number of stores");
+        }
+        Store newStore = newProduct.getStores().get(0);
+        Store lastStore = getLastStoreWithSameUrl(oldProduct, newStore.getUrl());
+        if (lastStore == null) {
+            addStore(oldProduct, newStore);
+            return;
+        }
+        if (!Objects.equals(lastStore.getCost(), newStore.getCost())) {
+            addStore(oldProduct, newStore);
+        }
+    }
+
+    private static Store getLastStoreWithSameUrl(Product oldProduct, String url) {
+        Store lastStore = null;
+        for (Store s : oldProduct.getStores()) {
+            if (!s.getUrl().equals(url)) {
+                continue;
+            }
+            if (lastStore == null) {
+                lastStore = s;
+            }
+            if (s.getDate().compareTo(lastStore.getDate()) > 0) {
+                lastStore = s;
+            }
+        }
+        return lastStore;
+    }
+
+    private static void addStore(Product oldProduct, Store newStore) {
+        oldProduct.getStores().add(newStore);
+        newStore.setProduct(oldProduct);
     }
 }
-

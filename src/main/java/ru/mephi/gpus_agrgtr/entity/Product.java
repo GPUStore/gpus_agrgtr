@@ -1,16 +1,16 @@
 package ru.mephi.gpus_agrgtr.entity;
 
-import lombok.Data;
-import lombok.EqualsAndHashCode;
+import lombok.Getter;
+import lombok.Setter;
 import org.hibernate.annotations.GenericGenerator;
 
 import javax.persistence.*;
 import java.util.List;
 import java.util.Set;
 
-@Data
-@EqualsAndHashCode
 @Entity
+@Getter
+@Setter
 @Table(name = "product")
 public class Product {
     @Id
@@ -53,7 +53,7 @@ public class Product {
         return this;
     }
 
-    public Product setCategories(Set<Category> categorySet){
+    public Product setCategories(Set<Category> categorySet) {
         this.categories = categorySet;
         return this;
     }

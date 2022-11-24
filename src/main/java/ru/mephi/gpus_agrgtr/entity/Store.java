@@ -1,15 +1,14 @@
 package ru.mephi.gpus_agrgtr.entity;
 
-import lombok.Data;
 import lombok.Getter;
+import lombok.Setter;
 import org.hibernate.annotations.GenericGenerator;
-
 import javax.persistence.*;
-import java.util.Objects;
+import java.util.Date;
 
-@Data
 @Getter
 @Entity
+@Setter
 @Table(name = "store")
 public class Store {
     @Id
@@ -19,6 +18,8 @@ public class Store {
     private String id;
     @Column(name = "name")
     private String name;
+    @Column(name = "date")
+    private Date date;
     @Column(name = "url")
     private String url;
     @Column(name = "cost")
@@ -29,6 +30,11 @@ public class Store {
 
     public Store setId(String id) {
         this.id = id;
+        return this;
+    }
+
+    public Store setDate(Date date) {
+        this.date = date;
         return this;
     }
 
@@ -50,20 +56,5 @@ public class Store {
     public Store setProduct(Product product) {
         this.product = product;
         return this;
-    }
-
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-        Store store = (Store) o;
-        return name.equals(store.name)
-                && url.equals(store.url)
-                && cost.equals(store.cost);
-    }
-
-    @Override
-    public int hashCode() {
-        return Objects.hash(name, url, cost);
     }
 }

@@ -22,7 +22,7 @@ public class ParseService {
         log.info("Парсинг начался");
         for (Parser parser : parsers) {
             log.info("Начался парсинг " + parser.getStoreName());
-            productService.save(parser.parse());
+            parser.parse().forEach(productService::save);
         }
         log.info("Парсинг закончился");
     }

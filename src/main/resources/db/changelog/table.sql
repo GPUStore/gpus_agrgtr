@@ -2,7 +2,7 @@ DROP TABLE IF EXISTS public.product CASCADE;
 DROP TABLE IF EXISTS public.store CASCADE;
 DROP TABLE IF EXISTS public.parameter CASCADE;
 DROP TABLE IF EXISTS public.characteristic CASCADE;
-DROP TABLE IF EXISTS public.category CASCADE ;
+DROP TABLE IF EXISTS public.category CASCADE;
 DROP TABLE IF EXISTS public.products_categories CASCADE;
 
 CREATE SEQUENCE IF NOT EXISTS store_seq;
@@ -50,25 +50,23 @@ CREATE TABLE IF NOT EXISTS public.store
     name                VARCHAR(255)    NOT NULL,
     url                 VARCHAR(255)    NOT NULL,
     product_id          VARCHAR(32)     NOT NULL,
+    date                DATE            NOT NULL,
 
     CONSTRAINT store_pkey               PRIMARY KEY (store_id),
     CONSTRAINT pp_product_fk            FOREIGN KEY (product_id)        REFERENCES product          (product_id)
 );
 
 CREATE TABLE IF NOT EXISTS public.category
-
-
 (
-    category_id         VARCHAR(255)             NOT NULL DEFAULT NEXTVAL('category_seq'),
+    category_id         VARCHAR(255)    NOT NULL DEFAULT NEXTVAL('category_seq'),
     name                VARCHAR(255)    NOT NULL,
 
-
     CONSTRAINT category_pkey            PRIMARY KEY (category_id)
-    );
+);
 
 CREATE TABLE IF NOT EXISTS public.products_categories
 (
-    category_id         VARCHAR(32)             NOT NULL,
+    category_id         VARCHAR(32)     NOT NULL,
     product_id          VARCHAR(32)     NOT NULL,
 
     CONSTRAINT category_fk              FOREIGN KEY (category_id)       REFERENCES category   (category_id),

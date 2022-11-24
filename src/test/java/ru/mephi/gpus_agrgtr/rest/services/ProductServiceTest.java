@@ -3,6 +3,7 @@ package ru.mephi.gpus_agrgtr.rest.services;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.ArgumentCaptor;
 import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.MockitoAnnotations;
@@ -10,53 +11,110 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import ru.mephi.gpus_agrgtr.category.CategoryExtractor;
 import ru.mephi.gpus_agrgtr.entity.Category;
 import ru.mephi.gpus_agrgtr.entity.Product;
-import ru.mephi.gpus_agrgtr.rest.repositories.CategoryRepository;
 import ru.mephi.gpus_agrgtr.rest.repositories.ProductRepository;
+import ru.mephi.gpus_agrgtr.rest.services.test.AbstractProductTest;
+import ru.mephi.gpus_agrgtr.rest.services.test.ProductTestData;
+import ru.mephi.gpus_agrgtr.utils.DateUtils;
 
-import java.util.List;
-import java.util.Optional;
-import java.util.Set;
+import java.time.Instant;
+import java.util.*;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.*;
 
 @ExtendWith(MockitoExtension.class)
-class ProductServiceTest {
-
+class ProductServiceTest extends AbstractProductTest {
     private static ProductService productService;
-    private static CategoryService categoryService;
-    private static CategoryExtractor categoryExtractor;
-    @Mock
-    private static CategoryRepository categoryRepository;
     @Mock
     private static ProductRepository productRepository;
+    @Mock
+    private static DateUtils dateUtils;
+    @Mock
+    private static CategoryExtractor categoryExtractor;
+
+    private static final ProductTestData td = new ProductTestData();
 
     @BeforeEach
     void setUp() {
         MockitoAnnotations.openMocks(this);
-        categoryExtractor = new CategoryExtractor();
-        categoryService = new CategoryService(categoryRepository);
-        productService = new ProductService(productRepository, categoryService, categoryExtractor);
+        productService = new ProductService(productRepository, categoryExtractor, dateUtils);
     }
 
     @Test
-    void getCategoriesOfExistingProduct() {
-        Set<Category> categorySet = Set.of(new Category("cat1"), new Category("cat2"));
-        Product product = new Product().setName("cat1 cat2").setCategories(categorySet);
+    void saveNewProduct() {
+        ArgumentCaptor<Product> productArgumentCaptor = ArgumentCaptor.forClass(Product.class);
+        Mockito.when(productRepository.findProductByName(Mockito.anyString())).thenReturn(Optional.empty());
+        Mockito.when(dateUtils.getNow()).thenReturn(Date.from(Instant.ofEpochSecond(101L)));
+        Mockito.when(categoryExtractor.extractCategorySet(Mockito.anyString())).thenReturn(Set.of(new Category("Product"), new Category("XXX1")));
+        productService.save(td.getProductsToSave().get(0));
 
-        Mockito.when(productRepository.findProductByName("cat1 cat2")).thenReturn(Optional.of(product));
-
-        Set<Category> categoriesFromService = productService.getCategories(product);
-
-        assertTrue(categoriesFromService.containsAll(categorySet) && categorySet.size() == categoriesFromService.size());
+        Mockito.verify(productRepository).save(productArgumentCaptor.capture());
+        Product savedProduct = productArgumentCaptor.getValue();
+        assertProducts(td.getExpectedProducts().get(0), savedProduct);
     }
 
     @Test
-    void getCategoriesOfNotExistingProduct() {
+    void saveExistingProduct() {
+        ArgumentCaptor<Product> productArgumentCaptor = ArgumentCaptor.forClass(Product.class);
+        Mockito.when(productRepository.findProductByName(Mockito.anyString())).thenReturn(Optional.ofNullable(td.getExistingProducts().get(1)));
+        Mockito.when(dateUtils.getNow()).thenReturn(Date.from(Instant.ofEpochSecond(102L)));
+
+        productService.save(td.getProductsToSave().get(1));
+
+        Mockito.verify(productRepository).save(productArgumentCaptor.capture());
+        Product savedProduct = productArgumentCaptor.getValue();
+        assertProducts(td.getExpectedProducts().get(1), savedProduct);
+    }
+
+
+    @Test
+    void saveExistingProductWithNewStore() {
+        ArgumentCaptor<Product> productArgumentCaptor = ArgumentCaptor.forClass(Product.class);
+        Mockito.when(productRepository.findProductByName(Mockito.anyString())).thenReturn(Optional.ofNullable(td.getExistingProducts().get(2)));
+        Mockito.when(dateUtils.getNow()).thenReturn(Date.from(Instant.ofEpochSecond(103L)));
+
+        productService.save(td.getProductsToSave().get(2));
+
+        Mockito.verify(productRepository).save(productArgumentCaptor.capture());
+        Product savedProduct = productArgumentCaptor.getValue();
+        assertProducts(td.getExpectedProducts().get(2), savedProduct);
+    }
+
+
+    @Test
+    void saveExistingProductSamePrice() {
+        ArgumentCaptor<Product> productArgumentCaptor = ArgumentCaptor.forClass(Product.class);
+        Mockito.when(productRepository.findAll()).thenReturn(new ArrayList<>());
+        Mockito.when(productRepository.findProductByName(Mockito.anyString())).thenReturn(Optional.ofNullable(td.getExistingProducts().get(3)));
+        Mockito.when(dateUtils.getNow()).thenReturn(Date.from(Instant.ofEpochSecond(104L)));
+
+        productService.save(td.getProductsToSave().get(3));
+
+        Mockito.verify(productRepository).save(productArgumentCaptor.capture());
+        Product savedProduct = productArgumentCaptor.getValue();
+        assertProducts(td.getExpectedProducts().get(3), savedProduct);
+    }
+
+    @Test
+    void saveProductByCategories() {
+        ArgumentCaptor<Product> productArgumentCaptor = ArgumentCaptor.forClass(Product.class);
+        Mockito.when(productRepository.findAll()).thenReturn(List.of(td.getExistingProducts().get(4)));
+        Mockito.when(productRepository.findProductByName(Mockito.anyString())).thenReturn(Optional.empty());
+        Mockito.when(dateUtils.getNow()).thenReturn(Date.from(Instant.ofEpochSecond(105L)));
+        Mockito.when(categoryExtractor.isEqual(Mockito.anySet(), Mockito.anySet())).thenReturn(true);
+
+        productService.save(td.getProductsToSave().get(4));
+
+        Mockito.verify(productRepository).save(productArgumentCaptor.capture());
+        Product savedProduct = productArgumentCaptor.getValue();
+        assertProducts(td.getExpectedProducts().get(4), savedProduct);
+    }
+
+    @Test
+    void getCategories() {
         Set<Category> categorySet = Set.of(new Category("cat1"), new Category("cat2"));
         Product product = new Product().setName("cat1 cat2").setCategories(categorySet);
 
-        Mockito.when(productRepository.findProductByName("cat1 cat2")).thenReturn(Optional.empty());
+        Mockito.when(categoryExtractor.extractCategorySet(Mockito.anyString())).thenReturn(Set.of(new Category("cat1"), new Category("cat2")));
 
         Set<Category> categoriesFromService = productService.getCategories(product);
 
@@ -75,10 +133,11 @@ class ProductServiceTest {
         Product product2 = new Product().setName("cat1 cat2 cat3 cat4").setCategories(categorySet2);
 
         Mockito.when(productRepository.findAll()).thenReturn(List.of(product2));
+        Mockito.when(categoryExtractor.isEqual(Mockito.anySet(), Mockito.anySet())).thenReturn(true);
 
-        Optional<Product> foundProduct = productService.findProductByCategories(productService.getCategories(product1));
+        Product foundProduct = productService.findProductByCategories(productService.getCategories(product1)).get().get();
 
-        assertTrue(foundProduct.isPresent());
-        assertEquals(product2, foundProduct.get());
+        assertNotNull(foundProduct);
+        assertEquals(product2, foundProduct);
     }
 }

@@ -135,7 +135,6 @@ public class TechnoparkParser extends Parser {
                 .setName(storeName)
                 .setUrl(link)
                 .setCost(cost);
-
         return new Product()
                 .setType(Type.VIDEOCARD)
                 .setName(name)

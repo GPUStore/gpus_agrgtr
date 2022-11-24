@@ -12,3 +12,4 @@ public class GpusAgrgtrApplication {
         SpringApplication.run(GpusAgrgtrApplication.class, args);
     }
 }
+
