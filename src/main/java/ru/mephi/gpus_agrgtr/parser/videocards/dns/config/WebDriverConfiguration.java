@@ -10,7 +10,7 @@ import org.springframework.context.annotation.Configuration;
 @Configuration
 public class WebDriverConfiguration {
     private static final String NAME_DRIVER = "webdriver.edge.driver";
-    private static final String PATH_DRIVER = "src/main/java/ru/mephi/gpus_agrgtr/parser/videocards/dns/resources/msedgedriver1.exe";
+    private static final String PATH_DRIVER = "gpus_agrgtr/src/main/java/ru/mephi/gpus_agrgtr/parser/videocards/dns/resources/msedgedriver.exe";
 
     @Bean
     public WebDriver webDriverBean(){
