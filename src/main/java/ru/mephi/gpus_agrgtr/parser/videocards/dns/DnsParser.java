@@ -36,7 +36,7 @@ import static ru.mephi.gpus_agrgtr.utils.StringUtils.getByPattern;
 public class DnsParser extends Parser {
     private final String storeUrl;
     private final WebDriver webDriver;
-    private static final Integer DEFAULT_WAIT = 3000;
+    private static final Integer DEFAULT_WAIT = 5000;
     private static final Integer START_WAIT_TIME_AS_MILLIS_ELEMENT = 500;
     private static final Integer EXTRA_TIME_AS_SECONDS = 2;
     private static final String NUMBER = "\\d+";
@@ -78,9 +78,7 @@ public class DnsParser extends Parser {
                     log.info("Product with link [" + links.get(i) + "] was not created." + e.getMessage());
                 }
             }
-            if (numberOfPage <= countPages) {
-                page = getPageWithDefaultWait(String.format(storeUrl, numberOfPage));
-            }
+            page = getPageWithDefaultWait(String.format(storeUrl, numberOfPage));
         }
         return products;
     }
