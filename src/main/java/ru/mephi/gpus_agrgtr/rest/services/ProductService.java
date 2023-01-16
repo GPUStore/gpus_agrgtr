@@ -1,5 +1,6 @@
 package ru.mephi.gpus_agrgtr.rest.services;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -8,6 +9,7 @@ import ru.mephi.gpus_agrgtr.entity.Category;
 import ru.mephi.gpus_agrgtr.entity.Product;
 import ru.mephi.gpus_agrgtr.entity.Store;
 import ru.mephi.gpus_agrgtr.rest.repositories.ProductRepository;
+import ru.mephi.gpus_agrgtr.rest.services.dto.ProductRsDto;
 import ru.mephi.gpus_agrgtr.utils.DateUtils;
 
 import java.util.*;
@@ -19,6 +21,8 @@ public class ProductService {
     private final ProductRepository productRepository;
     private final CategoryExtractor categoryExtractor;
     private final DateUtils dateUtils;
+
+    private final MessageSender messageSender;
 
     @Transactional
     public void save(Product product) {
@@ -75,6 +79,13 @@ public class ProductService {
         }
         if (!Objects.equals(lastStore.getCost(), newStore.getCost())) {
             addStore(oldProduct, newStore);
+        } else {
+            ProductRsDto dto = new ProductRsDto(oldProduct.getId(),lastStore.getCost(),newStore.getCost());
+            try {
+                messageSender.sendMessage(dto);
+            } catch (JsonProcessingException e) {
+                System.out.println("Unable to send message");
+            }
         }
     }
 

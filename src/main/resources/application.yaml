@@ -22,6 +22,8 @@ eureka:
 
 agrgtr:
   cron: 0 0 0 * * * #каждый день в полночь
+  stat_server:
+    url: http://localhost:8765/statistics
 
 logging:
   file:

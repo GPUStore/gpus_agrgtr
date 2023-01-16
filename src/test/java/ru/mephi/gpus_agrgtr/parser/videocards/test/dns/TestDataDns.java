@@ -3,11 +3,11 @@ package ru.mephi.gpus_agrgtr.parser.videocards.test.dns;
 import ru.mephi.gpus_agrgtr.entity.Product;
 import ru.mephi.gpus_agrgtr.entity.Store;
 import ru.mephi.gpus_agrgtr.entity.Type;
-import ru.mephi.gpus_agrgtr.parser.videocards.test.TestData;
+import ru.mephi.gpus_agrgtr.parser.videocards.test.ParserTestData;
 
 import java.util.List;
 
-public class TestDataDns extends TestData {
+public class TestDataDns extends ParserTestData {
 
     public static List<Product> getTestProducts() {
         return List.of(

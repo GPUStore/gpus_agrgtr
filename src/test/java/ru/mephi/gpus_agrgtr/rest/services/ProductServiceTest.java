@@ -36,7 +36,7 @@ class ProductServiceTest extends AbstractProductTest {
     @BeforeEach
     void setUp() {
         MockitoAnnotations.openMocks(this);
-        productService = new ProductService(productRepository, categoryExtractor, dateUtils);
+        productService = new ProductService(productRepository, categoryExtractor, dateUtils,null);
     }
 
     @Test
